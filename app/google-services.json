@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "710547108690",
+    "project_id": "memonary-c5cde",
+    "storage_bucket": "memonary-c5cde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710547108690:android:5ecc7e020e7496825a008b",
+        "android_client_info": {
+          "package_name": "com.example.memonary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710547108690-0ilcuadd95vprq6ogrhjf65l83jamg8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmITcNKut_Sh0KOJ-yy6Cqg5dlWnxTI3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710547108690-0ilcuadd95vprq6ogrhjf65l83jamg8k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
