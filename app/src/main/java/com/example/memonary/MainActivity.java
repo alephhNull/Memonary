@@ -2,6 +2,7 @@ package com.example.memonary;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
@@ -10,18 +11,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
+import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     public static FirebaseAuth mAuth;
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
+    private SimpleSearchView simpleSearchView;
+    private Toolbar toolbar;
     private static final String[] TABS = {"Stats", "Dictionary", "Words"};
 
     @Override
@@ -31,6 +43,27 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         viewPager2 = findViewById(R.id.viewPager2);
         tabLayout = findViewById(R.id.tabLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                toolbar.setTitle(tab.getText());
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        simpleSearchView = findViewById(R.id.searchView);
+        simpleSearchView.setTabLayout(tabLayout);
+        toolbar = findViewById(R.id.toolbar2);
+        setSupportActionBar(toolbar);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(viewPagerAdapter);
         viewPager2.setCurrentItem(1);
@@ -50,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_menu, menu);
-        return super.onCreateOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        simpleSearchView.setMenuItem(item);
+        if (viewPager2.getCurrentItem() != 1)
+            menu.findItem(R.id.action_logout).setVisible(false);
+        return true;
     }
 
     @Override
@@ -65,4 +102,5 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }
