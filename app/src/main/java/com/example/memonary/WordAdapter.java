@@ -1,6 +1,7 @@
 package com.example.memonary;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +9,24 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     private ArrayList<WordModel> searchedWords;
     private Context context;
 
-    public WordAdapter(Context context) {
+
+    public WordAdapter(ArrayList<WordModel> searchedWords, Context context) {
+        this.searchedWords = searchedWords;
         this.context = context;
     }
 
@@ -46,25 +54,18 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         return  searchedWords.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         //TODO
         private TextView wordTitle;
-        private Button saveButton;
         private RecyclerView pronunciations;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.wordTitle = itemView.findViewById(R.id.wordTitle);
-            this.saveButton = itemView.findViewById(R.id.save_button);
             this.pronunciations = itemView.findViewById(R.id.recyclerPronunciations);
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-
-        }
     }
 
     public ArrayList<WordModel> getSearchedWords() {

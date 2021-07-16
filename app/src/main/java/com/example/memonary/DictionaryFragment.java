@@ -1,18 +1,12 @@
 package com.example.memonary;
 
-import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,7 +24,7 @@ import retrofit2.Response;
 
 public class DictionaryFragment extends Fragment {
 
-    private RecyclerView recyclerViewWords;
+    private RecyclerView recyclerViewResponse;
     private ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 
     @Override
@@ -38,9 +32,9 @@ public class DictionaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dictionary, container, false);
-        recyclerViewWords = root.findViewById(R.id.recyclerWords);
-        recyclerViewWords.setAdapter(new WordAdapter(getContext()));
-        recyclerViewWords.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewResponse = root.findViewById(R.id.recyclerResponse);
+        recyclerViewResponse.setAdapter(new ResponseAdapter(getContext()));
+        recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()));
         SimpleSearchView simpleSearchView = getActivity().findViewById(R.id.searchView);
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
@@ -68,9 +62,9 @@ public class DictionaryFragment extends Fragment {
         call.enqueue(new Callback<List<WordModel>>() {
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
-                WordAdapter wordAdapter = (WordAdapter) recyclerViewWords.getAdapter();
-                wordAdapter.setSearchedWords((ArrayList<WordModel>) response.body());
-                wordAdapter.notifyDataSetChanged();
+                ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
+                adapter.setWords((ArrayList<WordModel>) response.body());
+                adapter.notifyDataSetChanged();
             }
 
             @Override
