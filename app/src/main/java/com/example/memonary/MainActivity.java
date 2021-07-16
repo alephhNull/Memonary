@@ -7,7 +7,10 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseAuth mAuth;
     public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference mDatabase;
-    public static HashMap<String, ArrayList<WordModel>> savedWords;
+    public static HashMap<String, WordWrapper> savedWords;
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private SimpleSearchView simpleSearchView;
@@ -52,21 +55,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabase = firebaseDatabase.getReference();
-        mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                savedWords = (HashMap<String, ArrayList<WordModel>>) snapshot.getValue();
-                if (savedWords == null)
-                    MainActivity.savedWords = new HashMap<>();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
         viewPager2 = findViewById(R.id.viewPager2);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -94,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager2.setAdapter(viewPagerAdapter);
         viewPager2.setCurrentItem(1);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
+        createNotificationChannel();
     }
 
     @Override
@@ -103,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
+        } else {
+            Executors.newSingleThreadExecutor().execute(this::initialize_database);
         }
     }
 
@@ -126,6 +117,36 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void initialize_database() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabase = firebaseDatabase.getReference();
+        mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                savedWords = (HashMap<String, WordWrapper>) snapshot.getValue();
+                if (savedWords == null)
+                    MainActivity.savedWords = new HashMap<>();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "notification";
+            String description = "";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 

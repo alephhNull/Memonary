@@ -5,10 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -16,14 +21,15 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
 
-    private ArrayList<WordModel> words;
+    private WordWrapper wordWrapper;
     private Context context;
 
-    public void setWords(ArrayList<WordModel> words) {
-        this.words = words;
+    public void setWordWrapper(WordWrapper wordWrapper) {
+        this.wordWrapper = wordWrapper;
     }
 
     public ResponseAdapter(Context context) {
@@ -41,24 +47,41 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WordAdapter wordAdapter = new WordAdapter(words, context);
+        WordAdapter wordAdapter = new WordAdapter((ArrayList<WordModel>) wordWrapper.getWords(), context);
+        holder.saveButton.setChecked(MainActivity.savedWords.containsKey(wordWrapper.getTitle()));
         holder.recyclerViewWords.setAdapter(wordAdapter);
         holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
         wordAdapter.notifyDataSetChanged();
-        holder.saveButton.setOnClickListener(new View.OnClickListener() {
+        holder.saveButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 DatabaseReference reference = MainActivity.mDatabase;
                 FirebaseUser user = MainActivity.mAuth.getCurrentUser();
-                if (!MainActivity.savedWords.containsKey(words.get(0).getWord()))
-                    reference.child("users").child(user.getUid()).child("words").child(words.get(0).getWord()).setValue(words);
+                if (b) {
+                    if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
+                        reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+                        scheduleWorker(wordWrapper.getTitle());
+                    }
+                } else {
+                    reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
+                }
             }
         });
     }
 
+    public void scheduleWorker(String word) {
+//        Data data = new Data.Builder().putString("word", word).build();
+//        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
+//                .setInitialDelay(30, TimeUnit.SECONDS)
+//                .addTag(word)
+//                .setInputData(data)
+//                .build();
+//        WorkManager.getInstance(context).enqueue(notificationWork);
+    }
+
     @Override
     public int getItemCount() {
-        if (words == null)
+        if (wordWrapper == null || wordWrapper.getWords() == null)
             return 0;
         return 1;
     }
@@ -66,7 +89,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private RecyclerView recyclerViewWords;
-        private Button saveButton;
+        private ToggleButton saveButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

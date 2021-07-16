@@ -63,7 +63,8 @@ public class DictionaryFragment extends Fragment {
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
                 ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
-                adapter.setWords((ArrayList<WordModel>) response.body());
+                WordWrapper wordWrapper = new WordWrapper(word, response.body());
+                adapter.setWordWrapper(wordWrapper);
                 adapter.notifyDataSetChanged();
             }
 
