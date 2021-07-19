@@ -64,19 +64,20 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
                     }
                 } else {
                     reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
+                    WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
                 }
             }
         });
     }
 
     public void scheduleWorker(String word) {
-//        Data data = new Data.Builder().putString("word", word).build();
-//        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
-//                .setInitialDelay(30, TimeUnit.SECONDS)
-//                .addTag(word)
-//                .setInputData(data)
-//                .build();
-//        WorkManager.getInstance(context).enqueue(notificationWork);
+        Data data = new Data.Builder().putString("word", word).build();
+        OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .addTag(word)
+                .setInputData(data)
+                .build();
+        WorkManager.getInstance(context).enqueue(notificationWork);
     }
 
     @Override

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,9 @@ public class DictionaryFragment extends Fragment {
         recyclerViewResponse = root.findViewById(R.id.recyclerResponse);
         recyclerViewResponse.setAdapter(new ResponseAdapter(getContext()));
         recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()));
+        Bundle bundle = getActivity().getIntent().getExtras();
+        if (bundle != null)
+            perform_search(bundle.getString("word"));
         SimpleSearchView simpleSearchView = getActivity().findViewById(R.id.searchView);
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override

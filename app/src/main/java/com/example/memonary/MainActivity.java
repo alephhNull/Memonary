@@ -12,6 +12,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager2.setCurrentItem(1);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
+        Log.d("test", "onCreate called");
     }
 
     @Override
@@ -95,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Executors.newSingleThreadExecutor().execute(this::initialize_database);
         }
+        Log.d("test", "onStart called");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("test", "onResume called");
     }
 
     @Override
@@ -126,9 +135,11 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                savedWords = (HashMap<String, WordWrapper>) snapshot.getValue();
-                if (savedWords == null)
-                    MainActivity.savedWords = new HashMap<>();
+                savedWords = new HashMap<>();
+                for (DataSnapshot snapchild : snapshot.getChildren()) {
+                    WordWrapper wordWrapper = snapchild.getValue(WordWrapper.class);
+                    savedWords.put(wordWrapper.getTitle(), wordWrapper);
+                }
             }
 
             @Override

@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".LoginActivity" />
 
+        <receiver android:name=".RememberBroadcast" />
+        <receiver android:name=".ForgetBroadcast" />
     </application>
 
 </manifest>
