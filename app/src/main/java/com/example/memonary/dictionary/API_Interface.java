@@ -1,4 +1,4 @@
-package com.example.memonary;
+package com.example.memonary.dictionary;
 
 import java.util.List;
 

@@ -1,21 +1,17 @@
 package com.example.memonary;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import java.util.Arrays;
-import java.util.Random;
+import com.example.memonary.broadcasts.ForgetBroadcast;
+import com.example.memonary.broadcasts.RememberBroadcast;
 
 public class NotifyWorker extends Worker {
 
@@ -40,6 +36,8 @@ public class NotifyWorker extends Worker {
         for (Intent intent : intents) {
             intent.putExtra("word", word);
         }
+        MainActivity.mDatabase.child("users").child(MainActivity.mAuth.getUid()).child("words").child(word)
+                .child("isDue").setValue(true);
         PendingIntent showWord = PendingIntent.getActivity(context, word.hashCode(), intents[0], PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent forgetWord = PendingIntent.getBroadcast(context, word.hashCode(), intents[1], PendingIntent.FLAG_CANCEL_CURRENT);
         PendingIntent rememberWord = PendingIntent.getBroadcast(context, word.hashCode(), intents[2], PendingIntent.FLAG_CANCEL_CURRENT);

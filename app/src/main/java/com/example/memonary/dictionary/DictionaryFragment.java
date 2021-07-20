@@ -1,4 +1,4 @@
-package com.example.memonary;
+package com.example.memonary.dictionary;
 
 import android.os.Bundle;
 
@@ -6,14 +6,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.memonary.R;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;

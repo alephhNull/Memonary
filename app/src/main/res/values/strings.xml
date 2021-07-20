@@ -2,4 +2,15 @@
     <string name="app_name">Memonary</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="spinner_array">
+        <item>Due Words</item>
+        <item>1 Day Words</item>
+        <item>2 Day Words</item>
+        <item>4 Day Words</item>
+        <item>8 Day words</item>
+        <item>15 Day Words</item>
+        <item>Learned Words</item>
+        <item>All Words</item>
+    </string-array>
 </resources>

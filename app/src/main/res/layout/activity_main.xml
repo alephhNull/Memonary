@@ -22,18 +22,15 @@
             app:title="Memonary"
             app:titleTextColor="?attr/colorOnPrimary" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <com.ferfalk.simplesearchview.SimpleSearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:hintColor="@color/default_textColorHint"
             app:voiceSearch="true"
-            app:searchBackground="?attr/colorOnPrimary" />
+            app:searchBackground="?attr/colorOnPrimary" >
+
+        </com.ferfalk.simplesearchview.SimpleSearchView>
     </FrameLayout>
 
     <com.google.android.material.tabs.TabLayout

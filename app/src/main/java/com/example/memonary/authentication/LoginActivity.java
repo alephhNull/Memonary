@@ -1,4 +1,4 @@
-package com.example.memonary;
+package com.example.memonary.authentication;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+
+import com.example.memonary.R;
 
 public class LoginActivity extends FragmentActivity {
 

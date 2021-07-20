@@ -16,10 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".authentication.LoginActivity" />
 
-        <receiver android:name=".RememberBroadcast" />
-        <receiver android:name=".ForgetBroadcast" />
+        <receiver android:name="com.example.memonary.broadcasts.RememberBroadcast" />
+        <receiver android:name="com.example.memonary.broadcasts.ForgetBroadcast" />
     </application>
 
 </manifest>

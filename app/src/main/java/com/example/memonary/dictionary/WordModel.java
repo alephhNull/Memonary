@@ -1,7 +1,4 @@
-package com.example.memonary;
-
-import android.util.Log;
-import android.widget.Toast;
+package com.example.memonary.dictionary;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;

@@ -1,15 +1,16 @@
-package com.example.memonary;
+package com.example.memonary.dictionary;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.memonary.R;
 
 import java.util.ArrayList;
 

@@ -3,8 +3,6 @@ package com.example.memonary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.NotificationChannel;
@@ -15,10 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.example.memonary.authentication.LoginActivity;
 import com.ferfalk.simplesearchview.SimpleSearchView;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,16 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.example.memonary.dictionary.ViewPagerAdapter;
+import com.example.memonary.dictionary.WordWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private SimpleSearchView simpleSearchView;
     private Toolbar toolbar;
+    public Spinner spinner;
     private static final String[] TABS = {"Stats", "Dictionary", "Words"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +58,16 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                toolbar.setTitle(tab.getText());
+                switch (tab.getPosition()) {
+                    case 0:
+                    case 1:
+                        spinner.setVisibility(View.GONE);
+                        toolbar.setTitle(TABS[tab.getPosition()]);
+                        break;
+                    default:
+                        toolbar.setTitle(null);
+                        spinner.setVisibility(View.VISIBLE);
+                }
                 invalidateOptionsMenu();
             }
 
@@ -79,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
         simpleSearchView.setTabLayout(tabLayout);
         toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        spinner = new Spinner(getSupportActionBar().getThemedContext());
+        spinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_dropdown_item, getResources().getStringArray(R.array.spinner_array)));
+        toolbar.addView(spinner, 0);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(viewPagerAdapter);
         viewPager2.setCurrentItem(1);

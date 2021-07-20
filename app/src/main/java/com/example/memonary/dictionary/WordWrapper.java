@@ -1,10 +1,9 @@
-package com.example.memonary;
+package com.example.memonary.dictionary;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @IgnoreExtraProperties
 public class WordWrapper {
@@ -17,6 +16,8 @@ public class WordWrapper {
 
     private String state = states.get(0);
 
+    private boolean isDue = false;
+
     public WordWrapper(String title, List<WordModel> words) {
         this.title = title;
         this.words = words;
@@ -24,6 +25,14 @@ public class WordWrapper {
 
     public WordWrapper() {
 
+    }
+
+    public boolean getIsDue() {
+        return isDue;
+    }
+
+    public void setIsDue(boolean isDue) {
+        this.isDue = isDue;
     }
 
     public String getTitle() {
