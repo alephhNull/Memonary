@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,15 +17,17 @@ import android.widget.Spinner;
 
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
+import com.example.memonary.WordWrapperViewModel;
 import com.example.memonary.dictionary.WordWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WordsFragment extends Fragment {
+public class WordsFragment extends Fragment implements OnWordSelectedListener {
 
     private RecyclerView savedWordsRecyclerView;
+    private WordWrapperViewModel wordWrapperViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +35,8 @@ public class WordsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root =  inflater.inflate(R.layout.fragment_words, container, false);
         savedWordsRecyclerView = root.findViewById(R.id.recyclerSavedWords);
-        SavedWordsAdapter savedWordsAdapter = new SavedWordsAdapter(getContext());
+        SavedWordsAdapter savedWordsAdapter = new SavedWordsAdapter(getContext(), this);
+        wordWrapperViewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
         savedWordsRecyclerView.setAdapter(savedWordsAdapter);
         savedWordsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -58,4 +62,14 @@ public class WordsFragment extends Fragment {
         });
         return root;
     }
+
+    @Override
+    public void onWordSelected(WordWrapper wordWrapper) {
+        wordWrapperViewModel.selectWord(wordWrapper);
+    }
+
+}
+
+interface OnWordSelectedListener {
+    void onWordSelected(WordWrapper wordWrapper);
 }

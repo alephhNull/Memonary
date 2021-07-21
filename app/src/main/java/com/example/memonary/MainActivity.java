@@ -3,6 +3,7 @@ package com.example.memonary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.app.NotificationChannel;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private SimpleSearchView simpleSearchView;
     private Toolbar toolbar;
+    private WordWrapperViewModel viewModel;
     public Spinner spinner;
     private static final String[] TABS = {"Stats", "Dictionary", "Words"};
     @Override
@@ -53,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
+        viewModel = new ViewModelProvider(this).get(WordWrapperViewModel.class);
+        viewModel.getSelectedWord().observe(this, wordWrapper -> viewPager2.setCurrentItem(1));
         viewPager2 = findViewById(R.id.viewPager2);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

@@ -2,6 +2,7 @@ package com.example.memonary.words;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
     ArrayList<WordWrapper> savedWords;
     Context context;
+    OnWordSelectedListener onWordSelectedListener;
     int state;
 
-    public SavedWordsAdapter(Context context) {
+    public SavedWordsAdapter(Context context, OnWordSelectedListener onWordSelectedListener) {
         this.context = context;
+        this.onWordSelectedListener = onWordSelectedListener;
     }
 
     @NonNull
@@ -81,7 +84,7 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
         return savedWords.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView wordTextView;
         private ImageButton rememberButton;
@@ -92,17 +95,15 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
             wordTextView = itemView.findViewById(R.id.savedWord);
             rememberButton = itemView.findViewById(R.id.rememberButton);
             forgetButton = itemView.findViewById(R.id.forgetButton);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-
+            WordWrapper wordWrapper = savedWords.get(getAdapterPosition());
+            onWordSelectedListener.onWordSelected(wordWrapper);
         }
 
-        @Override
-        public boolean onLongClick(View view) {
-            return false;
-        }
     }
 
     public void setSavedWords(ArrayList<WordWrapper> savedWords, int state) {
