@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
@@ -37,12 +38,19 @@ public class DictionaryFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_dictionary, container, false);
         recyclerViewResponse = root.findViewById(R.id.recyclerResponse);
         recyclerViewResponse.setAdapter(new ResponseAdapter(getContext()));
-        recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         viewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
-        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), wordWrapper -> search_saved_word(wordWrapper.getTitle()));
+        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
+        if (viewModel.getSelectedWord().getValue() != null)
+            show_word(viewModel.getSelectedWord().getValue());
         Bundle bundle = getActivity().getIntent().getExtras();
-        if (bundle != null) {
-            search_saved_word(bundle.getString("word"));
+        if (bundle != null && bundle.getString("word") != null) {
+            show_word(MainActivity.savedWords.get(bundle.getString("word")));
         }
         SimpleSearchView simpleSearchView = getActivity().findViewById(R.id.searchView);
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
@@ -73,8 +81,7 @@ public class DictionaryFragment extends Fragment {
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
                 ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
                 WordWrapper wordWrapper = new WordWrapper(word, response.body());
-                adapter.setWordWrapper(wordWrapper);
-                adapter.notifyDataSetChanged();
+                viewModel.selectWord(wordWrapper);
             }
 
             @Override
@@ -84,10 +91,9 @@ public class DictionaryFragment extends Fragment {
         });
     }
 
-    public void search_saved_word(String word) {
-        WordWrapper wordWrapper = MainActivity.savedWords.get(word);
+    public void show_word(WordWrapper word) {
         ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
-        adapter.setWordWrapper(wordWrapper);
+        adapter.setWordWrapper(word);
         adapter.notifyDataSetChanged();
     }
 }

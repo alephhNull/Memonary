@@ -38,7 +38,7 @@ public class NotifyWorker extends Worker {
         }
         MainActivity.mDatabase.child("users").child(MainActivity.mAuth.getUid()).child("words").child(word)
                 .child("isDue").setValue(true);
-        PendingIntent showWord = PendingIntent.getActivity(context, word.hashCode(), intents[0], PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent showWord = PendingIntent.getActivity(context, word.hashCode(), intents[0], PendingIntent.FLAG_CANCEL_CURRENT);
         PendingIntent forgetWord = PendingIntent.getBroadcast(context, word.hashCode(), intents[1], PendingIntent.FLAG_CANCEL_CURRENT);
         PendingIntent rememberWord = PendingIntent.getBroadcast(context, word.hashCode(), intents[2], PendingIntent.FLAG_CANCEL_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")

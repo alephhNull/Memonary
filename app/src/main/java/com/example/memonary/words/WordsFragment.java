@@ -39,8 +39,8 @@ public class WordsFragment extends Fragment implements OnWordSelectedListener {
         wordWrapperViewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
         savedWordsRecyclerView.setAdapter(savedWordsAdapter);
         savedWordsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        MainActivity mainActivity = (MainActivity) getActivity();
-        Spinner spinner = mainActivity.spinner;
+        Spinner spinner = getActivity().findViewById(R.id.spinner);
+        spinner.setAdapter(new SpinnerAdapter(getContext(), getResources().getStringArray(R.array.spinner_array)));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override

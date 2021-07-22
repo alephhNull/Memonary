@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private SimpleSearchView simpleSearchView;
     private Toolbar toolbar;
     private WordWrapperViewModel viewModel;
-    public Spinner spinner;
+    private Spinner spinner;
     private static final String[] TABS = {"Stats", "Dictionary", "Words"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +90,16 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        spinner = new Spinner(getSupportActionBar().getThemedContext());
-        spinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_dropdown_item, getResources().getStringArray(R.array.spinner_array)));
-        toolbar.addView(spinner, 0);
+        spinner = findViewById(R.id.spinner);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(viewPagerAdapter);
-        viewPager2.setCurrentItem(1);
+        viewPager2.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                viewPager2.setCurrentItem(1);
+            }
+        }, 10);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
         Log.d("test", "onCreate called");
@@ -114,11 +118,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d("test", "onStart called");
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("test", "onResume called");
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
