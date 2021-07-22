@@ -36,10 +36,26 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.wordTitle.setText(searchedWords.get(position).getWord());
-        PronunciationAdapter adapter = new PronunciationAdapter((ArrayList<Phonetics>) searchedWords.get(position).getPhonetics());
+        WordModel wordModel = searchedWords.get(position);
+        holder.wordTitle.setText(wordModel.getWord());
+        PronunciationAdapter adapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());
         holder.pronunciations.setAdapter(adapter);
         holder.pronunciations.setLayoutManager(new LinearLayoutManager(context));
+        StringBuilder meaningStr = new StringBuilder();
+        for (Meaning meaning : wordModel.getMeanings()) {
+            meaningStr.append("part of speech:").append(meaning.getPartOfSpeech()).append("\n");
+            for (Definition definition : meaning.getDefinitions()) {
+                meaningStr.append("definition:\n").append(definition.getDefinition()).append("\n");
+                meaningStr.append("example:\n").append(definition.getExample()).append("\n");
+                if (definition.getSynonyms() != null) {
+                    meaningStr.append("synonyms:\n");
+                    for (String synonym : definition.getSynonyms()) {
+                        meaningStr.append(synonym).append("\n");
+                    }
+                }
+            }
+        }
+        holder.meaning.setText(meaningStr);
     }
 
     @Override
@@ -54,11 +70,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         //TODO
         private TextView wordTitle;
         private RecyclerView pronunciations;
+        private TextView meaning;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.wordTitle = itemView.findViewById(R.id.wordTitle);
             this.pronunciations = itemView.findViewById(R.id.recyclerPronunciations);
+            this.meaning = itemView.findViewById(R.id.textView_meaning);
         }
 
     }

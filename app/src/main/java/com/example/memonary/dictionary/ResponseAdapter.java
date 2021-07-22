@@ -52,20 +52,17 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
         holder.recyclerViewWords.setAdapter(wordAdapter);
         holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
         wordAdapter.notifyDataSetChanged();
-        holder.saveButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                DatabaseReference reference = MainActivity.mDatabase;
-                FirebaseUser user = MainActivity.mAuth.getCurrentUser();
-                if (b) {
-                    if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
-                        reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
-                        scheduleWorker(wordWrapper.getTitle());
-                    }
-                } else {
-                    reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
-                    WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
+        holder.saveButton.setOnCheckedChangeListener((compoundButton, b) -> {
+            DatabaseReference reference = MainActivity.mDatabase;
+            FirebaseUser user = MainActivity.mAuth.getCurrentUser();
+            if (b) {
+                if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
+                    reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+                    scheduleWorker(wordWrapper.getTitle());
                 }
+            } else {
+                reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
+                WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
             }
         });
     }
