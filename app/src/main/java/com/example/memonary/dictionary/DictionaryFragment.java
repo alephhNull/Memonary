@@ -37,7 +37,7 @@ public class DictionaryFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dictionary, container, false);
         recyclerViewResponse = root.findViewById(R.id.recyclerResponse);
-        recyclerViewResponse.setAdapter(new ResponseAdapter(getContext()));
+        recyclerViewResponse.setAdapter(new ResponseAdapter(getContext(), this));
         recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
@@ -95,5 +95,9 @@ public class DictionaryFragment extends Fragment {
         ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
         adapter.setWordWrapper(word);
         adapter.notifyDataSetChanged();
+    }
+
+    public ThreadPoolExecutor getThreadPoolExecutor() {
+        return threadPoolExecutor;
     }
 }

@@ -18,6 +18,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     private ArrayList<WordModel> searchedWords;
     private Context context;
+    private DictionaryFragment dictionaryFragment;
 
 
     public WordAdapter(ArrayList<WordModel> searchedWords, Context context) {
@@ -38,7 +39,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
         holder.wordTitle.setText(wordModel.getWord());
-        PronunciationAdapter adapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());
+        PronunciationAdapter adapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics(), context, dictionaryFragment);
         holder.pronunciations.setAdapter(adapter);
         holder.pronunciations.setLayoutManager(new LinearLayoutManager(context));
         StringBuilder meaningStr = new StringBuilder();

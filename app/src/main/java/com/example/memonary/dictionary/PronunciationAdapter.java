@@ -10,16 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdapter.ViewHolder> {
 
     ArrayList<Phonetics> pronunciations;
+    Context context;
+    public DictionaryFragment dictionaryFragment;
 
-    public PronunciationAdapter(ArrayList<Phonetics> pronunciations) {
+    public PronunciationAdapter(ArrayList<Phonetics> pronunciations, Context context, DictionaryFragment dictionaryFragment) {
         this.pronunciations = pronunciations;
+        this.context = context;
+        this.dictionaryFragment = dictionaryFragment;
     }
 
     @NonNull
@@ -34,6 +40,7 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.phonetic.setText(pronunciations.get(position).getText());
+        holder.url = pronunciations.get(position).getAudioUrl();
         //TODO load audio
     }
 
@@ -48,11 +55,20 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
 
         private TextView phonetic;
         private ImageButton audioButton;
+        private String url;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             phonetic = itemView.findViewById(R.id.phoneticText);
             audioButton = itemView.findViewById(R.id.audioButton);
+            audioButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println(url);
+                    Executors.newFixedThreadPool(5).execute(AudioManager.getInstance(url));
+
+                }
+            });
         }
     }
 }

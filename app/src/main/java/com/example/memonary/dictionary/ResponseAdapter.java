@@ -31,13 +31,15 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
     private WordWrapper wordWrapper;
     private Context context;
+    private DictionaryFragment dictionaryFragment;
 
     public void setWordWrapper(WordWrapper wordWrapper) {
         this.wordWrapper = wordWrapper;
     }
 
-    public ResponseAdapter(Context context) {
+    public ResponseAdapter(Context context, DictionaryFragment dictionaryFragment) {
         this.context = context;
+        this.dictionaryFragment = dictionaryFragment;
     }
 
     @NonNull
@@ -75,19 +77,6 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
             }
             return kotlin.Unit.INSTANCE;
         });
-        //holder.saveButton.setOnCheckedChangeListener((compoundButton, b) -> {
-        //    DatabaseReference reference = MainActivity.mDatabase;
-        //    FirebaseUser user = MainActivity.mAuth.getCurrentUser();
-        //    if (b) {
-        //        if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
-        //            reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
-        //            scheduleWorker(wordWrapper.getTitle());
-        //        }
-        //    } else {
-        //        reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
-        //        WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
-        //    }
-        //});
     }
 
     public void scheduleWorker(String word) {
