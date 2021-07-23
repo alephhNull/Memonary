@@ -10,7 +10,8 @@
         android:id="@+id/wordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:textSize="25sp"
+        android:text="" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPronunciations"
@@ -22,6 +23,7 @@
     <TextView
         android:id="@+id/textView_meaning"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:textSize="20sp"/>
 
 </LinearLayout>

@@ -6,22 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ToggleButton
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:text="save"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/recyclerWords" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerWords"
         android:layout_width="0dp"
         android:layout_height="0dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="101dp"
+        android:id="@+id/save_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:alignItems="center"
+        app:justifyContent="center"
+        app:toggle_requiredAmount="0">
+
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/save_toggle_btn"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:toggle_icon="@drawable/ic_baseline_save_24"
+            app:toggle_selectedIcon="@drawable/ic_baseline_save_24"
+            app:toggle_iconPadding="18dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            app:toggle_btnCornerRadius="50dp"
+            app:toggle_borderWidth="5dp"
+            app:toggle_borderColor="#C6C6C6"
+            app:toggle_selectedBorderColor="#5e6fed"
+            app:toggle_backgroundColor="@android:color/white" />
+    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

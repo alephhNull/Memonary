@@ -1,6 +1,7 @@
 package com.example.memonary.dictionary;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
+import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
 
@@ -48,23 +52,42 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordAdapter wordAdapter = new WordAdapter((ArrayList<WordModel>) wordWrapper.getWords(), context);
-        holder.saveButton.setChecked(MainActivity.savedWords.containsKey(wordWrapper.getTitle()));
+        if (MainActivity.savedWords.containsKey(wordWrapper.getTitle()) ^ holder.saveButton.getButtons().get(0).isSelected()) {
+            holder.saveButton.selectButton(R.id.save_toggle_btn);
+        }
+        Log.d("selected?", String.valueOf(holder.saveButton.getButtons().get(0).isSelected()));
+
         holder.recyclerViewWords.setAdapter(wordAdapter);
         holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
         wordAdapter.notifyDataSetChanged();
-        holder.saveButton.setOnCheckedChangeListener((compoundButton, b) -> {
+        holder.saveButton.setOnSelectListener((ThemedButton btn) -> {
             DatabaseReference reference = MainActivity.mDatabase;
             FirebaseUser user = MainActivity.mAuth.getCurrentUser();
-            if (b) {
+            if (btn.isSelected()) {
                 if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
                     reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
                     scheduleWorker(wordWrapper.getTitle());
                 }
+
             } else {
                 reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
                 WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
             }
+            return kotlin.Unit.INSTANCE;
         });
+        //holder.saveButton.setOnCheckedChangeListener((compoundButton, b) -> {
+        //    DatabaseReference reference = MainActivity.mDatabase;
+        //    FirebaseUser user = MainActivity.mAuth.getCurrentUser();
+        //    if (b) {
+        //        if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
+        //            reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+        //            scheduleWorker(wordWrapper.getTitle());
+        //        }
+        //    } else {
+        //        reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
+        //        WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
+        //    }
+        //});
     }
 
     public void scheduleWorker(String word) {
@@ -87,7 +110,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private RecyclerView recyclerViewWords;
-        private ToggleButton saveButton;
+        private ThemedToggleButtonGroup saveButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
