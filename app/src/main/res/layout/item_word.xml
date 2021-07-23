@@ -7,6 +7,9 @@
     android:orientation="vertical">
 
     <TextView
+        android:paddingTop="20dp"
+        android:paddingStart="15dp"
+        android:paddingRight="80dp"
         android:id="@+id/wordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,6 +24,7 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
+        android:paddingStart="15dp"
         android:id="@+id/textView_meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
