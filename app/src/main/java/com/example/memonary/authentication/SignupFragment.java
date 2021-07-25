@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
@@ -26,6 +28,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener{
     private EditText emailTextField;
     private EditText passwordTextField;
     private EditText confirmPasswordTextField;
+    private TextView loginTxtView;
 
     @Nullable
     @Override
@@ -36,6 +39,13 @@ public class SignupFragment extends Fragment implements View.OnClickListener{
         emailTextField = root.findViewById(R.id.editTextTextEmailAddress2);
         passwordTextField = root.findViewById(R.id.editTextTextPassword1);
         confirmPasswordTextField = root.findViewById(R.id.editTextTextPassword2);
+        loginTxtView = root.findViewById(R.id.alreadyHaveAccount);
+        loginTxtView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_signupFragment2_to_loginFragment2);
+            }
+        });
         return root;
     }
 

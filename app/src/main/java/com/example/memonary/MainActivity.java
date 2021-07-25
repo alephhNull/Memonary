@@ -15,8 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.example.memonary.authentication.LoginActivity;
@@ -93,13 +91,7 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(viewPagerAdapter);
-        viewPager2.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                viewPager2.setCurrentItem(1);
-            }
-        }, 10);
+        viewPager2.postDelayed(() -> viewPager2.setCurrentItem(1), 10);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
         Log.d("test", "onCreate called");

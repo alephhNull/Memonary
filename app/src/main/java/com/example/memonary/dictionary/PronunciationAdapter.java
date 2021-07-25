@@ -6,13 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.memonary.MainActivity;
 import com.example.memonary.R;
-
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
@@ -41,7 +37,6 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.phonetic.setText(pronunciations.get(position).getText());
         holder.url = pronunciations.get(position).getAudioUrl();
-        //TODO load audio
     }
 
     @Override
@@ -53,21 +48,17 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView phonetic;
-        private ImageButton audioButton;
+        private final TextView phonetic;
         private String url;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             phonetic = itemView.findViewById(R.id.phoneticText);
-            audioButton = itemView.findViewById(R.id.audioButton);
-            audioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println(url);
-                    Executors.newFixedThreadPool(5).execute(AudioManager.getInstance(url));
+            ImageButton audioButton = itemView.findViewById(R.id.audioButton);
+            audioButton.setOnClickListener(v -> {
+                System.out.println(url);
+                Executors.newFixedThreadPool(5).execute(AudioManager.getInstance(url));
 
-                }
             });
         }
     }

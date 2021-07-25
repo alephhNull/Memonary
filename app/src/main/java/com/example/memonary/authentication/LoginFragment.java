@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ import com.google.firebase.auth.AuthResult;
 public class LoginFragment extends Fragment implements View.OnClickListener{
 
     private Button loginButton;
-    private Button signupButton;
+    private TextView signupButton;
     private EditText emailTextField;
     private EditText passwordTextField;
 

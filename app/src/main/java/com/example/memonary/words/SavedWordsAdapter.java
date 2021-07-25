@@ -2,7 +2,6 @@ package com.example.memonary.words;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,9 +85,9 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView wordTextView;
-        private ImageButton rememberButton;
-        private ImageButton forgetButton;
+        private final TextView wordTextView;
+        private final ImageButton rememberButton;
+        private final ImageButton forgetButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,7 +102,6 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
             WordWrapper wordWrapper = savedWords.get(getAdapterPosition());
             onWordSelectedListener.onWordSelected(wordWrapper);
         }
-
     }
 
     public void setSavedWords(ArrayList<WordWrapper> savedWords, int state) {
