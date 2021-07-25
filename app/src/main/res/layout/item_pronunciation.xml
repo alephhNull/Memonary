@@ -25,12 +25,14 @@
         android:layout_height="30dp"
         android:layout_marginStart="2dp"
         android:layout_marginBottom="2dp"
+        android:adjustViewBounds="true"
         android:background="@drawable/circular_background"
+        android:padding="5dp"
         android:scaleType="fitCenter"
         android:tint="?attr/colorOnPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/phoneticText"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/ic_audio" />
+        app:srcCompat="@drawable/ic_audio" />
 </androidx.constraintlayout.widget.ConstraintLayout>

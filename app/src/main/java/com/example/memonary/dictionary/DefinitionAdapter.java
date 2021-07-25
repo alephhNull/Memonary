@@ -43,7 +43,10 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.Vi
         Definition definition = definitions.get(position);
         holder.definition.setText(definition.getDefinition());
         holder.example.setText(definition.getExample());
-        holder.synonyms.setText(String.join(", ", definition.getSynonyms()));
+        String synonyms = null;
+        if (definition.getSynonyms() != null)
+            synonyms = "synonyms: " + String.join(", ", definition.getSynonyms());
+        holder.synonyms.setText(synonyms);
     }
 
     @Override
