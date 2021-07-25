@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
     android:orientation="vertical">
 
     <TextView
-        android:paddingTop="20dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="80dp"
         android:id="@+id/wordTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:text="" />
+        android:text="TextView"
+        android:textSize="36sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPronunciations"
@@ -21,11 +21,9 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <TextView
-        android:paddingStart="15dp"
-        android:id="@+id/textView_meaning"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerMeanings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

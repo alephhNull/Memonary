@@ -1,27 +1,27 @@
 package com.example.memonary.dictionary;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.memonary.R;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.Executors;
 
 public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdapter.ViewHolder> {
 
     ArrayList<Phonetics> pronunciations;
-    Context context;
-    public DictionaryFragment dictionaryFragment;
 
-    public PronunciationAdapter(ArrayList<Phonetics> pronunciations, Context context, DictionaryFragment dictionaryFragment) {
+    public PronunciationAdapter(ArrayList<Phonetics> pronunciations) {
         this.pronunciations = pronunciations;
-        this.context = context;
-        this.dictionaryFragment = dictionaryFragment;
     }
 
     @NonNull
@@ -36,7 +36,24 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.phonetic.setText(pronunciations.get(position).getText());
-        holder.url = pronunciations.get(position).getAudioUrl();
+        holder.audioButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playAudioFromUrl(pronunciations.get(position).getAudioUrl());
+            }
+        });
+    }
+
+    public void playAudioFromUrl(String url){
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -48,18 +65,13 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView phonetic;
-        private String url;
+        private TextView phonetic;
+        private ImageButton audioButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             phonetic = itemView.findViewById(R.id.phoneticText);
-            ImageButton audioButton = itemView.findViewById(R.id.audioButton);
-            audioButton.setOnClickListener(v -> {
-                System.out.println(url);
-                Executors.newFixedThreadPool(5).execute(AudioManager.getInstance(url));
-
-            });
+            audioButton = itemView.findViewById(R.id.audioButton);
         }
     }
 }
