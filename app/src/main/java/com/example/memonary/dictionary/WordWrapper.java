@@ -3,12 +3,18 @@ package com.example.memonary.dictionary;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @IgnoreExtraProperties
 public class WordWrapper {
 
     public static final  List<String> states = Arrays.asList("1", "2", "4", "8", "15", "LEARNED");
+
+    private Date dateStart;
+
+    private Date dateEnd;
 
     private String title;
 
@@ -21,6 +27,8 @@ public class WordWrapper {
     public WordWrapper(String title, List<WordModel> words) {
         this.title = title;
         this.words = words;
+        this.dateStart = new Date();
+        this.dateEnd = new Date();
     }
 
     public WordWrapper() {
@@ -60,4 +68,19 @@ public class WordWrapper {
         return words;
     }
 
+    public Date getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart() {
+        this.dateStart = Calendar.getInstance().getTime();
+    }
+
+    public Date getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd() {
+        this.dateEnd = Calendar.getInstance().getTime();
+    }
 }

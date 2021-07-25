@@ -30,6 +30,9 @@ public class RememberBroadcast extends BroadcastReceiver {
         WordWrapper wordWrapper = MainActivity.savedWords.get(word);
         if (wordWrapper != null) {
             int currentState = WordWrapper.states.indexOf(wordWrapper.getState());
+            if (currentState == 4) {
+                wordWrapper.setDateEnd();
+            }
             Map<String, Object> children = new HashMap<>();
             children.put("state", WordWrapper.states.get(currentState + 1));
             children.put("isDue", false);

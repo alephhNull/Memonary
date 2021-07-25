@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.memonary.StatsFragment;
+import com.example.memonary.stats.StatsFragment;
 import com.example.memonary.words.WordsFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {

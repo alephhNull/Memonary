@@ -57,7 +57,6 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
         if (MainActivity.savedWords.containsKey(wordWrapper.getTitle()) ^ holder.saveButton.getButtons().get(0).isSelected()) {
             holder.saveButton.selectButton(R.id.save_toggle_btn);
         }
-        Log.d("selected?", String.valueOf(holder.saveButton.getButtons().get(0).isSelected()));
 
         holder.recyclerViewWords.setAdapter(wordAdapter);
         holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
@@ -67,13 +66,16 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
             FirebaseUser user = MainActivity.mAuth.getCurrentUser();
             if (btn.isSelected()) {
                 if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
-                    reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+                    reference.child("users").child(user.getUid())
+                             .child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+                    wordWrapper.setDateStart();
                     scheduleWorker(wordWrapper.getTitle());
                 }
-
             } else {
-                reference.child("users").child(user.getUid()).child("words").child(wordWrapper.getTitle()).removeValue();
+                reference.child("users").child(user.getUid()).child("words")
+                         .child(wordWrapper.getTitle()).removeValue();
                 WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
+                MainActivity.savedWords.remove(wordWrapper.getTitle());
             }
             return kotlin.Unit.INSTANCE;
         });
@@ -98,8 +100,8 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private RecyclerView recyclerViewWords;
-        private ThemedToggleButtonGroup saveButton;
+        private final RecyclerView recyclerViewWords;
+        private final ThemedToggleButtonGroup saveButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
