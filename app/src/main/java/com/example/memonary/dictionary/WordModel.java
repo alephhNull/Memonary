@@ -18,9 +18,6 @@ public class WordModel {
     @SerializedName("meanings")
     private List<Meaning> meanings;
 
-//    @SerializedName("meanings")
-//    private List<Meaning> meanings;
-
     public String getWord() {
         return word;
     }
@@ -29,9 +26,6 @@ public class WordModel {
         return phonetics;
     }
 
-//    public List<Meaning> getMeanings() {
-//        return meanings;
-//    }
 
 
     @Override

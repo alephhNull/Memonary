@@ -5,16 +5,24 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/partOfSpeech"
+        android:id="@+id/definitionTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:textSize="18sp"
-        android:textStyle="italic" />
+        android:textSize="18sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recylerDefinitions"
+    <TextView
+        android:id="@+id/exampleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="25dp" />
+        android:text="TextView"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/synonymsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+
 </LinearLayout>
