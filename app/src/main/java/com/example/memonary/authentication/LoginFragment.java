@@ -27,6 +27,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextView signupButton;
     private EditText emailTextField;
     private EditText passwordTextField;
+    private TextView forgotPassword;
 
     @Nullable
     @Override
@@ -35,10 +36,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         loginButton = root.findViewById(R.id.loginButton);
         loginButton.setOnClickListener(this);
         signupButton = root.findViewById(R.id.signupButton);
+        forgotPassword = root.findViewById(R.id.forgotPassword);
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate(R.id.action_loginFragment2_to_signupFragment2);
+            }
+        });
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_loginFragment2_to_resetFragment);
             }
         });
         emailTextField = root.findViewById(R.id.editTextTextEmailAddress);

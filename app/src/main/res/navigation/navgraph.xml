@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_loginFragment2_to_signupFragment2"
             app:destination="@id/signupFragment2" />
+        <action
+            android:id="@+id/action_loginFragment2_to_resetFragment"
+            app:destination="@id/resetFragment" />
     </fragment>
     <fragment
         android:id="@+id/signupFragment2"
@@ -20,6 +23,14 @@
         tools:layout="@layout/fragment_signup" >
         <action
             android:id="@+id/action_signupFragment2_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/resetFragment"
+        android:name="com.example.memonary.authentication.ResetFragment"
+        android:label="ResetFragment" >
+        <action
+            android:id="@+id/action_resetFragment_to_loginFragment2"
             app:destination="@id/loginFragment2" />
     </fragment>
 </navigation>
