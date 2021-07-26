@@ -41,27 +41,25 @@ public class ResetFragment extends Fragment {
             }
         });
         sendBtn = root.findViewById(R.id.ResetButton);
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isValid()) {
-                    MainActivity.mAuth.sendPasswordResetEmail(emailTxtField.getText().toString())
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull @NotNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(getContext(), "Email Sent.", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                }
-
+        sendBtn.setOnClickListener(v -> {
+            if (isValid()) {
+                MainActivity.mAuth.sendPasswordResetEmail(emailTxtField.getText().toString())
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Email Sent.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "There is a problem with internet connection or email address", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                Toast.makeText(getContext(), "Invalid Email Address.", Toast.LENGTH_SHORT).show();
             }
+
         });
         return root;
     }
 
     private boolean isValid() {
-        return true;
+        return !emailTxtField.getText().toString().equals("");
     }
 }
