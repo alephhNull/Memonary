@@ -61,10 +61,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                             }
                         }
                     });
+        } else {
+            Toast.makeText(getContext(),"Fill the required fields please.",Toast.LENGTH_SHORT).show();
         }
     }
 
     public boolean validateInput() {
-        return true;
+        return !emailTextField.getText().toString().equals("") && !passwordTextField.getText().toString().equals("");
     }
 }

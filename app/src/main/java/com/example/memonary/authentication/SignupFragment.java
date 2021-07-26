@@ -64,10 +64,18 @@ public class SignupFragment extends Fragment implements View.OnClickListener{
                             }
                         }
                     });
+        } else {
+            Toast.makeText(getContext(),"The fields are not valid.",Toast.LENGTH_SHORT).show();
         }
     }
 
     public boolean validateInputs() {
+        if (emailTextField.getText().toString().equals("") || passwordTextField.getText().toString().equals("") || confirmPasswordTextField.getText().toString().equals("")) {
+            return false;
+        }
+        if (!passwordTextField.getText().toString().equals(confirmPasswordTextField.getText().toString())) {
+            return false;
+        }
         return true;
     }
 }
