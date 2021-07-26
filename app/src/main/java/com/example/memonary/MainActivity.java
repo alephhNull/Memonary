@@ -47,28 +47,25 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private WordWrapperViewModel viewModel;
     private Spinner spinner;
-    private static final String[] TABS = {"Stats", "Dictionary", "Words"};
+    private static final String[] TABS = {"Dictionary", "Words"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         viewModel = new ViewModelProvider(this).get(WordWrapperViewModel.class);
-        viewModel.getSelectedWord().observe(this, wordWrapper -> viewPager2.setCurrentItem(1));
+        viewModel.getSelectedWord().observe(this, wordWrapper -> viewPager2.setCurrentItem(0));
         viewPager2 = findViewById(R.id.viewPager2);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case 0:
-                    case 1:
-                        spinner.setVisibility(View.GONE);
-                        toolbar.setTitle(TABS[tab.getPosition()]);
-                        break;
-                    default:
-                        toolbar.setTitle(null);
-                        spinner.setVisibility(View.VISIBLE);
+                if (tab.getPosition() == 0) {
+                    spinner.setVisibility(View.GONE);
+                    toolbar.setTitle(TABS[tab.getPosition()]);
+                } else {
+                    toolbar.setTitle(null);
+                    spinner.setVisibility(View.VISIBLE);
                 }
                 invalidateOptionsMenu();
             }
@@ -91,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager2.setAdapter(viewPagerAdapter);
-        viewPager2.postDelayed(() -> viewPager2.setCurrentItem(1), 10);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
         Log.d("test", "onCreate called");
@@ -116,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.action_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         simpleSearchView.setMenuItem(item);
-        if (viewPager2.getCurrentItem() != 1)
-            menu.findItem(R.id.action_logout).setVisible(false);
+        if (viewPager2.getCurrentItem() != 0)
+            item.setVisible(false);
         return true;
     }
 

@@ -11,7 +11,7 @@ import com.example.memonary.words.WordsFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    private final int NUM_OF_TABS = 3;
+    private final int NUM_OF_TABS = 2;
 
     public ViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
@@ -21,11 +21,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position) {
-            case 0:
-                return new StatsFragment();
-            case 1:
-                return new DictionaryFragment();
+        if (position == 0) {
+            return new DictionaryFragment();
         }
         return new WordsFragment();
     }

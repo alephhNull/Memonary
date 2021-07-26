@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +40,7 @@ public class WordsFragment extends Fragment implements OnWordSelectedListener {
         wordWrapperViewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
         savedWordsRecyclerView.setAdapter(savedWordsAdapter);
         savedWordsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        savedWordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
         Spinner spinner = getActivity().findViewById(R.id.spinner);
         spinner.setAdapter(new SpinnerAdapter(getContext(), getResources().getStringArray(R.array.spinner_array)));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
