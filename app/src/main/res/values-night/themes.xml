@@ -4,9 +4,12 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="android:textColor">#F0F0F0</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
+        <item name="background">@color/blackSurface</item>
+        <item name="colorSurface">@color/blackSurface</item>
         <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->

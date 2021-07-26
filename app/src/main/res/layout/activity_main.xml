@@ -35,6 +35,7 @@
             android:layout_height="match_parent"
             app:hintColor="@color/default_textColorHint"
             app:voiceSearch="true"
+            android:textColor="?android:textColor"
             app:searchBackground="?attr/colorOnPrimary" >
 
         </com.ferfalk.simplesearchview.SimpleSearchView>

@@ -11,4 +11,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorRed">#C11515</color>
     <color name="colorPrimaryDark">#3262C4</color>
+    <color name="blackSurface">#121212</color>
 </resources>

@@ -1,23 +1,14 @@
 package com.example.memonary.stats;
 
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 import com.example.memonary.dictionary.WordWrapper;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class StatsFragment extends Fragment {
