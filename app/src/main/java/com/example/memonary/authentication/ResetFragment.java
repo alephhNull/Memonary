@@ -2,7 +2,6 @@ package com.example.memonary.authentication;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -16,10 +15,6 @@ import android.widget.Toast;
 
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import org.jetbrains.annotations.NotNull;
 
 public class ResetFragment extends Fragment {
 
@@ -34,12 +29,7 @@ public class ResetFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_reset, container, false);
         emailTxtField = root.findViewById(R.id.editTextTextEmailAddressReset);
         loginTxt = root.findViewById(R.id.ResetTxtToLogin);
-        loginTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_resetFragment_to_loginFragment2);
-            }
-        });
+        loginTxt.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_resetFragment_to_loginFragment2));
         sendBtn = root.findViewById(R.id.ResetButton);
         sendBtn.setOnClickListener(v -> {
             if (isValid()) {

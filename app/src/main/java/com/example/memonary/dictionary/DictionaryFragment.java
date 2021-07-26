@@ -86,7 +86,7 @@ public class DictionaryFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<WordModel>> call, Throwable t) {
-
+                Toast.makeText(getContext(), "No Result Found, Please Check The Connection.", Toast.LENGTH_LONG).show();
             }
         });
     }
