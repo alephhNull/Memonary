@@ -3,6 +3,8 @@ package com.example.memonary;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.example.memonary.authentication.LoginActivity;
+import com.example.memonary.stats.DummyStatsProvider;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -29,7 +32,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 import com.example.memonary.dictionary.ViewPagerAdapter;
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference mDatabase;
     public static HashMap<String, WordWrapper> savedWords;
+    public MutableLiveData<List<WordWrapper>> liveWords = new MutableLiveData<>();
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private SimpleSearchView simpleSearchView;
@@ -145,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
                     WordWrapper wordWrapper = snapchild.getValue(WordWrapper.class);
                     savedWords.put(wordWrapper.getTitle(), wordWrapper);
                 }
+                liveWords.postValue(new ArrayList<>(savedWords.values()));
+//                liveWords.postValue(DummyStatsProvider.createDummyStats());
             }
 
             @Override

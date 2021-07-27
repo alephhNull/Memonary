@@ -4,13 +4,14 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 @IgnoreExtraProperties
 public class WordWrapper {
 
-    public static final  List<String> states = Arrays.asList("1", "2", "4", "8", "15", "LEARNED");
+    public static final List<String> states = Arrays.asList("1", "2", "4", "8", "15", "LEARNED");
 
     private Date dateStart;
 
@@ -72,6 +73,14 @@ public class WordWrapper {
         return dateStart;
     }
 
+    public void setDateStart(Date dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
     public void setDateStart() {
         this.dateStart = Calendar.getInstance().getTime();
     }
@@ -82,5 +91,22 @@ public class WordWrapper {
 
     public void setDateEnd() {
         this.dateEnd = Calendar.getInstance().getTime();
+    }
+
+    public int getWordsSize() {
+        if (words != null) {
+            return words.size();
+        }
+        return 0;
+    }
+
+    public static class DateComprator implements Comparator<WordWrapper> {
+
+        @Override
+        public int compare(WordWrapper o1, WordWrapper o2) {
+            if (o1.getDateStart().getTime() > o2.getDateStart().getTime()) return 1;
+            else if (o1.getDateStart().getTime() < o2.getDateStart().getTime()) return -1;
+            else return 0;
+        }
     }
 }
