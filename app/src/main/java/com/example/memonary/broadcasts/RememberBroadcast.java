@@ -47,7 +47,7 @@ public class RememberBroadcast extends BroadcastReceiver {
     public void scheduleWorker(Context context, String word, int initialDelay) {
         Data data = new Data.Builder().putString("word", word).build();
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
-                .setInitialDelay(initialDelay, TimeUnit.SECONDS)
+                .setInitialDelay(initialDelay, TimeUnit.DAYS)
                 .addTag(word)
                 .setInputData(data)
                 .build();

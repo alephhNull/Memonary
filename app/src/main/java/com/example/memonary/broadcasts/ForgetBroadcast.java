@@ -31,7 +31,7 @@ public class ForgetBroadcast extends BroadcastReceiver {
             reference.child("users").child(MainActivity.mAuth.getUid()).child("words").child(word).updateChildren(children);
             Data data = new Data.Builder().putString("word", word).build();
             OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
-                    .setInitialDelay(1, TimeUnit.SECONDS)
+                    .setInitialDelay(1, TimeUnit.DAYS)
                     .addTag(word)
                     .setInputData(data)
                     .build();

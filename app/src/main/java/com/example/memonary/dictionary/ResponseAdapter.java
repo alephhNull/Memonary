@@ -84,7 +84,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     public void scheduleWorker(String word) {
         Data data = new Data.Builder().putString("word", word).build();
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
-                .setInitialDelay(1, TimeUnit.SECONDS)
+                .setInitialDelay(1, TimeUnit.DAYS)
                 .addTag(word)
                 .setInputData(data)
                 .build();
