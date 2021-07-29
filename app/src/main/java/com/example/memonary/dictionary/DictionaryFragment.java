@@ -79,14 +79,13 @@ public class DictionaryFragment extends Fragment {
         call.enqueue(new Callback<List<WordModel>>() {
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
-                ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
                 WordWrapper wordWrapper = new WordWrapper(word, response.body());
                 viewModel.selectWord(wordWrapper);
             }
 
             @Override
             public void onFailure(Call<List<WordModel>> call, Throwable t) {
-                Toast.makeText(getContext(), "No Result Found, Please Check The Connection.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Connection failed, please check your network", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -97,7 +96,4 @@ public class DictionaryFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    public ThreadPoolExecutor getThreadPoolExecutor() {
-        return threadPoolExecutor;
-    }
 }

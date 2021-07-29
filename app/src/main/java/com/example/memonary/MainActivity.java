@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -45,7 +46,6 @@ import com.example.memonary.dictionary.WordWrapper;
 public class MainActivity extends AppCompatActivity {
 
     public static FirebaseAuth mAuth;
-    public static FirebaseDatabase firebaseDatabase;
     public static DatabaseReference mDatabase;
     public static HashMap<String, WordWrapper> savedWords;
     private ViewPager2 viewPager2;
@@ -109,50 +109,8 @@ public class MainActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
         } else {
-            Executors.newSingleThreadExecutor().execute(this::initialize_database);
+            initialize_database();
         }
-        Log.d("test", "onStart called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!isNetworkConnected()) {
-            new AlertDialog.Builder(this)
-                    .setTitle("No Connection!")
-                    .setMessage("Please check your internet connection and enter after that.")
-
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            moveTaskToBack(true);
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                            System.exit(1);
-                        }
-                    })
-
-                    // A null listener allows the button to dismiss the dialog and take no further action.
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        }
-    }
-
-
-    private boolean isNetworkConnected() {
-
-        ConnectivityManager cm =
-                (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
     }
 
     @Override
@@ -178,9 +136,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initialize_database() {
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabase = firebaseDatabase.getReference();
+    public static void initialize_database() {
+        if (mDatabase != null) return;
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -210,4 +170,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isDestroyed())
+            Log.d("testDestroy", "onDestoy called");
+    }
 }

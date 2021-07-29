@@ -41,12 +41,23 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Definition definition = definitions.get(position);
-        holder.definition.setText(definition.getDefinition());
-        holder.example.setText(definition.getExample());
-        String synonyms = null;
-        if (definition.getSynonyms() != null)
+        String definitionText = (position + 1) + ". " + definition.getDefinition();
+        holder.definition.setText(definitionText);
+        if (definition.getExample() == null) {
+            holder.example.setVisibility(View.GONE);
+        }
+        else {
+            String exampleText = "\"" + definition.getExample() + "\"";
+            holder.example.setText(exampleText);
+        }
+        if (definition.getSynonyms() == null || definition.getSynonyms().isEmpty()) {
+            holder.synonyms.setVisibility(View.GONE);
+        }
+        else {
+            String synonyms;
             synonyms = "synonyms: " + String.join(", ", definition.getSynonyms());
-        holder.synonyms.setText(synonyms);
+            holder.synonyms.setText(synonyms);
+        }
     }
 
     @Override

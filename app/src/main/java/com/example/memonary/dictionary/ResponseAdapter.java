@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -84,7 +85,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
     public void scheduleWorker(String word) {
         Data data = new Data.Builder().putString("word", word).build();
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
-                .setInitialDelay(1, TimeUnit.DAYS)
+                .setInitialDelay(1, TimeUnit.SECONDS)
                 .addTag(word)
                 .setInputData(data)
                 .build();

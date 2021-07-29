@@ -44,7 +44,7 @@ public class NotifyWorker extends Worker {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "1")
                 .setContentTitle(word)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setSmallIcon(R.drawable.ic_search_black_24dp)
+                .setSmallIcon(R.drawable.ic_book_of_black_cover_closed)
                 .setContentIntent(showWord)
                 .addAction(0, "Forgot", forgetWord)
                 .addAction(0, "Remember", rememberWord);
