@@ -18,6 +18,7 @@ import com.example.memonary.R;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
@@ -50,10 +51,10 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 //        if (MainActivity.savedWords.containsKey(wordWrapper.getTitle()) ^ holder.saveButton.getButtons().get(0).isSelected()) {
 //            holder.saveButton.selectButton(R.id.save_toggle_btn);
 //        }
-
-        holder.recyclerViewWords.setAdapter(wordAdapter);
-        holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
-        wordAdapter.notifyDataSetChanged();
+//
+//        holder.recyclerViewWords.setAdapter(wordAdapter);
+//        holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
+//        wordAdapter.notifyDataSetChanged();
 //        holder.saveButton.setOnSelectListener((ThemedButton btn) -> {
 //            DatabaseReference reference = MainActivity.mDatabase;
 //            FirebaseUser user = MainActivity.mAuth.getCurrentUser();

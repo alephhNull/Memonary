@@ -1,21 +1,14 @@
 package com.example.memonary;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +18,7 @@ import android.view.View;
 import android.widget.Spinner;
 
 import com.example.memonary.authentication.LoginActivity;
+import com.example.memonary.dictionary.WordModel;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -36,9 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
 
 import com.example.memonary.dictionary.ViewPagerAdapter;
 import com.example.memonary.dictionary.WordWrapper;
@@ -48,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseAuth mAuth;
     public static DatabaseReference mDatabase;
     public static HashMap<String, WordWrapper> savedWords;
-    private ViewPager2 viewPager2;
+    public static HashMap<String, WordModel> words;
+    private ViewPager2 viewPager;
     private TabLayout tabLayout;
     private SimpleSearchView simpleSearchView;
     private Toolbar toolbar;
@@ -61,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         viewModel = new ViewModelProvider(this).get(WordWrapperViewModel.class);
-        viewModel.getSelectedWord().observe(this, wordWrapper -> viewPager2.setCurrentItem(0));
-        viewPager2 = findViewById(R.id.viewPager2);
+        viewModel.getSelectedWord().observe(this, wordWrapper -> viewPager.setCurrentItem(0));
+        viewPager = findViewById(R.id.viewPager2);
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+            public void onTabSelected   (TabLayout.Tab tab) {
                 if (tab.getPosition() == 0) {
                     spinner.setVisibility(View.GONE);
                     toolbar.setTitle(TABS[tab.getPosition()]);
@@ -94,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         spinner = findViewById(R.id.spinner);
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
-        viewPager2.setAdapter(viewPagerAdapter);
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> tab.setText(TABS[position])).attach();
+        viewPager.setAdapter(viewPagerAdapter);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
         Log.d("test", "onCreate called");
 
@@ -118,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.action_menu, menu);
         MenuItem item = menu.findItem(R.id.action_search);
         simpleSearchView.setMenuItem(item);
-        if (viewPager2.getCurrentItem() != 0)
+        if (viewPager.getCurrentItem() != 0)
             item.setVisible(false);
         return true;
     }
@@ -144,10 +138,12 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                savedWords = new HashMap<>();
+                words = new HashMap<>();
+//                savedWords = new HashMap<>();
                 for (DataSnapshot snapchild : snapshot.getChildren()) {
-                    WordWrapper wordWrapper = snapchild.getValue(WordWrapper.class);
-                    savedWords.put(wordWrapper.getTitle(), wordWrapper);
+                    WordModel word = snapchild.getValue(WordModel.class);
+//                    savedWords.put(wordWrapper.getTitle(), wordWrapper);
+                    words.put(word.toString(), word);
                 }
             }
 

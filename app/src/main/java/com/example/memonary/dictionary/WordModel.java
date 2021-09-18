@@ -1,5 +1,7 @@
 package com.example.memonary.dictionary;
 
+import android.util.Log;
+
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
@@ -19,7 +21,7 @@ public class WordModel {
     @SerializedName("meanings")
     private List<Meaning> meanings;
 
-    private Date dueDate = new Date();
+    private Date dueDate;
 
     public String getWord() {
         return word;
@@ -33,19 +35,17 @@ public class WordModel {
         return dueDate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        WordModel wordModel = (WordModel) o;
-        return word.equals(wordModel.word) &&
-                Objects.equals(phonetics, wordModel.phonetics) &&
-                meanings.equals(wordModel.meanings);
+    public String getId() {
+        return String.valueOf(this.hashCode());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(word, phonetics, meanings);
+    public String toString() {
+        return "WordModel{" +
+                "word='" + word + '\'' +
+                ", phonetics=" + phonetics +
+                ", meanings=" + meanings +
+                '}';
     }
 
     public List<Meaning> getMeanings() {
@@ -78,7 +78,13 @@ class Phonetics {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Phonetics{" +
+                "text='" + text + '\'' +
+                ", audioUrl='" + audioUrl + '\'' +
+                '}';
+    }
 }
 
 
@@ -97,6 +103,14 @@ class Meaning {
     public List<Definition> getDefinitions() {
         return definitions;
     }
+
+    @Override
+    public String toString() {
+        return "Meaning{" +
+                "partOfSpeech='" + partOfSpeech + '\'' +
+                ", definitions=" + definitions +
+                '}';
+    }
 }
 
 class Definition {
@@ -106,6 +120,9 @@ class Definition {
 
     @SerializedName("synonyms")
     private List<String> synonyms;
+
+    @SerializedName("antonyms")
+    private List<String> antonyms;
 
     @SerializedName("example")
     private String example;
@@ -120,5 +137,15 @@ class Definition {
 
     public String getExample() {
         return example;
+    }
+
+    @Override
+    public String toString() {
+        return "Definition{" +
+                "definition='" + definition + '\'' +
+                ", synonyms=" + synonyms +
+                ", antonyms=" + antonyms +
+                ", example='" + example + '\'' +
+                '}';
     }
 }
