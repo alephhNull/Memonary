@@ -7,12 +7,43 @@
     android:layout_marginStart="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/wordTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="36sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/wordTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            android:textSize="36sp" />
+
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+            android:id="@+id/save_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|right"
+            android:elevation="101dp"
+            app:justifyContent="flex_end"
+            app:toggle_requiredAmount="0">
+
+            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+                android:id="@+id/save_toggle_btn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="10dp"
+                app:toggle_backgroundColor="@android:color/white"
+                app:toggle_borderColor="#C6C6C6"
+                app:toggle_borderWidth="5dp"
+                app:toggle_btnCornerRadius="50dp"
+                app:toggle_icon="@drawable/ic_baseline_save_24"
+                app:toggle_iconPadding="20dp"
+                app:toggle_selectedBorderColor="#5e6fed"
+                app:toggle_selectedIcon="@drawable/ic_baseline_save_24" />
+        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerPronunciations"

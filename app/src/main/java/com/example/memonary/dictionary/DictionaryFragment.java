@@ -17,6 +17,7 @@ import com.example.memonary.R;
 import com.example.memonary.WordWrapperViewModel;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -28,7 +29,7 @@ import retrofit2.Response;
 
 public class DictionaryFragment extends Fragment {
 
-    private RecyclerView recyclerViewResponse;
+    private RecyclerView recyclerViewWords;
     private ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
     private WordWrapperViewModel viewModel;
     @Override
@@ -36,13 +37,9 @@ public class DictionaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dictionary, container, false);
-        recyclerViewResponse = root.findViewById(R.id.recyclerResponse);
-        recyclerViewResponse.setAdapter(new ResponseAdapter(getContext(), this));
-        recyclerViewResponse.setLayoutManager(new LinearLayoutManager(getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
+        recyclerViewWords = root.findViewById(R.id.recyclerWords);
+        recyclerViewWords.setAdapter(new WordsAdapter(getContext()));
+        recyclerViewWords.setLayoutManager(new LinearLayoutManager(getContext()) {
         });
         viewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
         viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
@@ -79,8 +76,8 @@ public class DictionaryFragment extends Fragment {
         call.enqueue(new Callback<List<WordModel>>() {
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
-                WordWrapper wordWrapper = new WordWrapper(word, response.body());
-                viewModel.selectWord(wordWrapper);
+                WordsAdapter adapter = (WordsAdapter) recyclerViewWords.getAdapter();
+                adapter.setSearchedWords((ArrayList<WordModel>) response.body());
             }
 
             @Override
@@ -91,7 +88,7 @@ public class DictionaryFragment extends Fragment {
     }
 
     public void show_word(WordWrapper word) {
-        ResponseAdapter adapter = (ResponseAdapter) recyclerViewResponse.getAdapter();
+        ResponseAdapter adapter = (ResponseAdapter) recyclerViewWords.getAdapter();
         adapter.setWordWrapper(word);
         adapter.notifyDataSetChanged();
     }

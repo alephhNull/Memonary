@@ -14,14 +14,13 @@ import com.example.memonary.R;
 
 import java.util.ArrayList;
 
-public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
+public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> {
 
     private ArrayList<WordModel> searchedWords;
     private Context context;
 
 
-    public WordAdapter(ArrayList<WordModel> searchedWords, Context context) {
-        this.searchedWords = searchedWords;
+    public WordsAdapter(Context context) {
         this.context = context;
     }
 
@@ -75,5 +74,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     public void setSearchedWords(ArrayList<WordModel> searchedWords) {
         this.searchedWords = searchedWords;
+        this.notifyDataSetChanged();
     }
 }

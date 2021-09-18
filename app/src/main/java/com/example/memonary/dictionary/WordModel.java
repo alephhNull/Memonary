@@ -3,6 +3,7 @@ package com.example.memonary.dictionary;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,8 @@ public class WordModel {
     @SerializedName("meanings")
     private List<Meaning> meanings;
 
+    private Date dueDate = new Date();
+
     public String getWord() {
         return word;
     }
@@ -26,7 +29,9 @@ public class WordModel {
         return phonetics;
     }
 
-
+    public Date getDueDate() {
+        return dueDate;
+    }
 
     @Override
     public boolean equals(Object o) {

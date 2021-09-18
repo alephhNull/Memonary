@@ -1,13 +1,9 @@
 package com.example.memonary.dictionary;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,16 +12,12 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import com.example.memonary.MainActivity;
 import com.example.memonary.NotifyWorker;
 import com.example.memonary.R;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
 
 public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHolder> {
@@ -54,32 +46,32 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WordAdapter wordAdapter = new WordAdapter((ArrayList<WordModel>) wordWrapper.getWords(), context);
-        if (MainActivity.savedWords.containsKey(wordWrapper.getTitle()) ^ holder.saveButton.getButtons().get(0).isSelected()) {
-            holder.saveButton.selectButton(R.id.save_toggle_btn);
-        }
+        WordsAdapter wordAdapter = new WordsAdapter(context);
+//        if (MainActivity.savedWords.containsKey(wordWrapper.getTitle()) ^ holder.saveButton.getButtons().get(0).isSelected()) {
+//            holder.saveButton.selectButton(R.id.save_toggle_btn);
+//        }
 
         holder.recyclerViewWords.setAdapter(wordAdapter);
         holder.recyclerViewWords.setLayoutManager(new LinearLayoutManager(context));
         wordAdapter.notifyDataSetChanged();
-        holder.saveButton.setOnSelectListener((ThemedButton btn) -> {
-            DatabaseReference reference = MainActivity.mDatabase;
-            FirebaseUser user = MainActivity.mAuth.getCurrentUser();
-            if (btn.isSelected()) {
-                if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
-                    reference.child("users").child(user.getUid())
-                             .child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
-                    wordWrapper.setDateStart();
-                    scheduleWorker(wordWrapper.getTitle());
-                }
-            } else {
-                reference.child("users").child(user.getUid()).child("words")
-                         .child(wordWrapper.getTitle()).removeValue();
-                WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
-                MainActivity.savedWords.remove(wordWrapper.getTitle());
-            }
-            return kotlin.Unit.INSTANCE;
-        });
+//        holder.saveButton.setOnSelectListener((ThemedButton btn) -> {
+//            DatabaseReference reference = MainActivity.mDatabase;
+//            FirebaseUser user = MainActivity.mAuth.getCurrentUser();
+//            if (btn.isSelected()) {
+//                if (!MainActivity.savedWords.containsKey(wordWrapper.getTitle())) {
+//                    reference.child("users").child(user.getUid())
+//                             .child("words").child(wordWrapper.getTitle()).setValue(wordWrapper);
+//                    wordWrapper.setDateStart();
+//                    scheduleWorker(wordWrapper.getTitle());
+//                }
+//            } else {
+//                reference.child("users").child(user.getUid()).child("words")
+//                         .child(wordWrapper.getTitle()).removeValue();
+//                WorkManager.getInstance(context).cancelAllWorkByTag(wordWrapper.getTitle());
+//                MainActivity.savedWords.remove(wordWrapper.getTitle());
+//            }
+//            return kotlin.Unit.INSTANCE;
+//        });
     }
 
     public void scheduleWorker(String word) {
@@ -106,7 +98,7 @@ public class ResponseAdapter extends RecyclerView.Adapter<ResponseAdapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            recyclerViewWords = itemView.findViewById(R.id.recyclerWords);
+            recyclerViewWords = itemView.findViewById(R.id.recyclerWordss);
             saveButton = itemView.findViewById(R.id.save_button);
         }
     }
