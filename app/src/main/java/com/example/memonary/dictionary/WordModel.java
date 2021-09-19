@@ -36,7 +36,7 @@ public class WordModel {
     }
 
     public String getId() {
-        return String.valueOf(this.hashCode());
+        return String.valueOf(this.toString().hashCode());
     }
 
     @Override

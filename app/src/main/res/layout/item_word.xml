@@ -20,29 +20,40 @@
             android:text="TextView"
             android:textSize="36sp" />
 
-        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-            android:id="@+id/save_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|right"
-            android:elevation="101dp"
-            app:justifyContent="flex_end"
-            app:toggle_requiredAmount="0">
+        <View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
-                android:id="@+id/save_toggle_btn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="10dp"
-                app:toggle_backgroundColor="@android:color/white"
-                app:toggle_borderColor="#C6C6C6"
-                app:toggle_borderWidth="5dp"
-                app:toggle_btnCornerRadius="50dp"
-                app:toggle_icon="@drawable/ic_baseline_save_24"
-                app:toggle_iconPadding="20dp"
-                app:toggle_selectedBorderColor="#5e6fed"
-                app:toggle_selectedIcon="@drawable/ic_baseline_save_24" />
-        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+        <Switch
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!--        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup-->
+<!--            android:id="@+id/save_button"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start|right"-->
+<!--            android:elevation="101dp"-->
+<!--            app:justifyContent="flex_end"-->
+<!--            app:toggle_requiredAmount="0">-->
+
+<!--            <nl.bryanderidder.themedtogglebuttongroup.ThemedButton-->
+<!--                android:id="@+id/save_toggle_btn"-->
+<!--                android:layout_width="50dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_margin="10dp"-->
+<!--                app:toggle_backgroundColor="@android:color/white"-->
+<!--                app:toggle_borderColor="#C6C6C6"-->
+<!--                app:toggle_borderWidth="5dp"-->
+<!--                app:toggle_btnCornerRadius="50dp"-->
+<!--                app:toggle_icon="@drawable/ic_baseline_save_24"-->
+<!--                app:toggle_iconPadding="20dp"-->
+<!--                app:toggle_selectedBorderColor="#5e6fed"-->
+<!--                app:toggle_selectedIcon="@drawable/ic_baseline_save_24" />-->
+<!--        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>-->
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

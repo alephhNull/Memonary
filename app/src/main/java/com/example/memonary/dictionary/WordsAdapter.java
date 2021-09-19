@@ -5,26 +5,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.memonary.MainActivity;
+import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
 
 import java.util.ArrayList;
 
 import kotlin.Unit;
-import nl.bryanderidder.themedtogglebuttongroup.ThemedButton;
-import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
 
 public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> {
 
     private ArrayList<WordModel> searchedWords;
     private Context context;
-    private ArrayList<WordModel> testWords;
+    private DatabaseManager dbManager = DatabaseManager.getInstance();
 
 
     public WordsAdapter(Context context) {
@@ -43,7 +42,8 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
-        holder.saveButton.setOnSelectListener((button) -> toggleSave(button, wordModel));
+        holder.saveButton.setChecked(dbManager.isSaved(wordModel));
+        holder.saveButton.setOnCheckedChangeListener((button, checked) -> toggleSave(checked, wordModel));
         holder.wordTitle.setText(wordModel.getWord());
         PronunciationAdapter pronunciationAdapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());
         holder.pronunciations.setAdapter(pronunciationAdapter);
@@ -53,11 +53,18 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
         holder.meanings.setLayoutManager(new LinearLayoutManager(context));
     }
 
-    private Unit toggleSave(ThemedButton button, WordModel word) {
-        if (!MainActivity.words.containsKey(word.getId())) {
-            MainActivity.mDatabase.child("users").child(MainActivity.mAuth.getUid()).child("words").child(word.getId()).setValue(word);
-        }
+    private Unit toggleSave(boolean isSaved, WordModel word) {
+        if (isSaved) saveWord(word);
+        else removeWord(word);
         return kotlin.Unit.INSTANCE;
+    }
+
+    private void saveWord(WordModel word) {
+        dbManager.addWord(word);
+    }
+
+    private void removeWord(WordModel word) {
+        dbManager.removeWord(word);
     }
 
     @Override
@@ -71,7 +78,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
 
         //TODO
         private TextView wordTitle;
-        private  ThemedToggleButtonGroup saveButton;
+        private Switch saveButton;
         private RecyclerView pronunciations;
         private RecyclerView meanings;
 
@@ -80,7 +87,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
             this.wordTitle = itemView.findViewById(R.id.wordTitle);
             this.pronunciations = itemView.findViewById(R.id.recyclerPronunciations);
             this.meanings = itemView.findViewById(R.id.recyclerMeanings);
-            this.saveButton = itemView.findViewById(R.id.save_button);
+            this.saveButton = itemView.findViewById(R.id.saveButton);
         }
 
     }

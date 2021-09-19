@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser == null) {
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(i);
-        } else {
-            initialize_database();
         }
     }
 
@@ -130,29 +128,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void initialize_database() {
-        if (mDatabase != null) return;
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase.child("users").child(mAuth.getUid()).child("words").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                words = new HashMap<>();
-//                savedWords = new HashMap<>();
-                for (DataSnapshot snapchild : snapshot.getChildren()) {
-                    WordModel word = snapchild.getValue(WordModel.class);
-//                    savedWords.put(wordWrapper.getTitle(), wordWrapper);
-                    words.put(word.toString(), word);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
