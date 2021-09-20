@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
+import com.example.memonary.Scheduler;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     private ArrayList<WordModel> searchedWords;
     private Context context;
     private DatabaseManager dbManager = DatabaseManager.getInstance();
+    private Scheduler scheduler = Scheduler.getInstance();
 
 
     public WordsAdapter(Context context) {
@@ -43,7 +45,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
         holder.saveButton.setChecked(dbManager.isSaved(wordModel));
-        holder.saveButton.setOnCheckedChangeListener((button, checked) -> toggleSave(checked, wordModel));
+        holder.saveButton.setOnClickListener((view) -> toggleSave(wordModel));
         holder.wordTitle.setText(wordModel.getWord());
         PronunciationAdapter pronunciationAdapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());
         holder.pronunciations.setAdapter(pronunciationAdapter);
@@ -53,17 +55,18 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
         holder.meanings.setLayoutManager(new LinearLayoutManager(context));
     }
 
-    private Unit toggleSave(boolean isSaved, WordModel word) {
-        if (isSaved) saveWord(word);
+    private void toggleSave(WordModel word) {
+        if (!dbManager.isSaved(word)) saveWord(word);
         else removeWord(word);
-        return kotlin.Unit.INSTANCE;
     }
 
     private void saveWord(WordModel word) {
+        scheduler.updateSchedule(word);
         dbManager.addWord(word);
     }
 
     private void removeWord(WordModel word) {
+        Log.i("fuck", word.getWord());
         dbManager.removeWord(word);
     }
 

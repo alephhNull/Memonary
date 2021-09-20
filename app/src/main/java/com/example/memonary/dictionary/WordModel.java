@@ -21,7 +21,10 @@ public class WordModel {
     @SerializedName("meanings")
     private List<Meaning> meanings;
 
-    private Date dueDate;
+
+    private WordState state = WordState.NOT_SAVED;
+
+    private long dueTime;
 
     public String getWord() {
         return word;
@@ -31,12 +34,13 @@ public class WordModel {
         return phonetics;
     }
 
-    public Date getDueDate() {
-        return dueDate;
-    }
 
     public String getId() {
         return String.valueOf(this.toString().hashCode());
+    }
+
+    public WordState getState() {
+        return state;
     }
 
     @Override
@@ -50,6 +54,18 @@ public class WordModel {
 
     public List<Meaning> getMeanings() {
         return meanings;
+    }
+
+    public void setState(WordState state) {
+        this.state = state;
+    }
+
+    public long getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(long dueTime) {
+        this.dueTime = dueTime;
     }
 }
 
