@@ -44,6 +44,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
+        Log.d("dictionary word", wordModel.toString());
         holder.saveButton.setChecked(dbManager.isSaved(wordModel));
         holder.saveButton.setOnClickListener((view) -> toggleSave(wordModel));
         holder.wordTitle.setText(wordModel.getWord());
@@ -66,7 +67,6 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     }
 
     private void removeWord(WordModel word) {
-        Log.i("fuck", word.getWord());
         dbManager.removeWord(word);
     }
 

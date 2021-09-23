@@ -12,6 +12,12 @@ public class MyApplication extends Application {
         mContext = this;
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+    }
+
     public static MyApplication getContext() {
         return mContext;
     }

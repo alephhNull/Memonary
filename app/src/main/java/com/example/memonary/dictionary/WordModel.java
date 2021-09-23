@@ -155,6 +155,10 @@ class Definition {
         return example;
     }
 
+    public List<String> getAntonyms() {
+        return antonyms;
+    }
+
     @Override
     public String toString() {
         return "Definition{" +

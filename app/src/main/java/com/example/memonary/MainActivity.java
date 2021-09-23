@@ -91,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> tab.setText(TABS[position])).attach();
         createNotificationChannel();
-        Log.d("test", "onCreate called");
-
     }
 
     @Override
@@ -139,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+        Intent i = new Intent(getApplicationContext(), CloseNotifications.class);
+        startService(i);
     }
 
     @Override
@@ -147,4 +147,5 @@ public class MainActivity extends AppCompatActivity {
         if (isDestroyed())
             Log.d("testDestroy", "onDestoy called");
     }
+
 }

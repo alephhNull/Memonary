@@ -43,9 +43,10 @@ public class DatabaseManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 savedWords = new HashMap<>();
                 for (DataSnapshot snapchild : snapshot.getChildren()) {
-                    WordModel word = snapchild.getValue(WordModel.class);
+                    WordModel word = (WordModel) snapchild.getValue(WordModel.class);
+                    Log.d("database word", word.toString());
                     savedWords.put(snapchild.getKey(), word);
-                    scheduler.scheduleWorker(word);
+                    scheduler.scheduleWorker(word, snapchild.getKey());
                 }
             }
 
@@ -56,7 +57,12 @@ public class DatabaseManager {
         });
     }
 
+    public void updateWord(WordModel word, String id) {
+        mDatabase.child("users").child(mAuth.getUid()).child("words").child(id).setValue(word);
+    }
+
     public void addWord(WordModel word) {
+        Log.d("added word", word.getId());
         mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).setValue(word);
     }
 
@@ -74,5 +80,9 @@ public class DatabaseManager {
 
     public void setDueDate(WordModel word, Date dueDate) {
         mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).child("dueDate").setValue(dueDate);
+    }
+
+    public WordModel getWordById(String id) {
+        return savedWords.get(id);
     }
 }

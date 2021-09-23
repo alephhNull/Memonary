@@ -4,17 +4,23 @@
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:allowBackup="true"
         android:name=".MyApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Memonary">
-        <activity android:name=".MainActivity"
+        <service
+            android:name=".CloseNotifications"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity
+            android:name=".MainActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,11 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".authentication.LoginActivity"
-            android:noHistory="true"/>
+        <activity
+            android:name=".authentication.LoginActivity"
+            android:noHistory="true" />
 
-        <receiver android:name="com.example.memonary.broadcasts.RememberBroadcast" />
-        <receiver android:name="com.example.memonary.broadcasts.ForgetBroadcast" />
+        <receiver android:name=".broadcasts.RememberBroadcast" />
+        <receiver android:name=".broadcasts.ForgetBroadcast" />
     </application>
 
 </manifest>
