@@ -17,13 +17,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DatabaseManager {
 
     private static DatabaseManager instance = new DatabaseManager();
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
-    private HashMap<String, WordModel> savedWords;
+    public HashMap<String, WordModel> savedWords;
     private Scheduler scheduler = Scheduler.getInstance();
 
     private DatabaseManager() {
@@ -44,9 +45,8 @@ public class DatabaseManager {
                 savedWords = new HashMap<>();
                 for (DataSnapshot snapchild : snapshot.getChildren()) {
                     WordModel word = (WordModel) snapchild.getValue(WordModel.class);
-                    Log.d("database word", word.toString());
-                    savedWords.put(snapchild.getKey(), word);
-                    scheduler.scheduleWorker(word, snapchild.getKey());
+                    savedWords.put(word.getId(), word);
+                    scheduler.scheduleWorker(word);
                 }
             }
 
@@ -57,12 +57,11 @@ public class DatabaseManager {
         });
     }
 
-    public void updateWord(WordModel word, String id) {
-        mDatabase.child("users").child(mAuth.getUid()).child("words").child(id).setValue(word);
+    public void updateWord(WordModel word) {
+        mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).setValue(word);
     }
 
     public void addWord(WordModel word) {
-        Log.d("added word", word.getId());
         mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).setValue(word);
     }
 
@@ -78,11 +77,4 @@ public class DatabaseManager {
         mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).child("state").setValue(state);
     }
 
-    public void setDueDate(WordModel word, Date dueDate) {
-        mDatabase.child("users").child(mAuth.getUid()).child("words").child(word.getId()).child("dueDate").setValue(dueDate);
-    }
-
-    public WordModel getWordById(String id) {
-        return savedWords.get(id);
-    }
 }

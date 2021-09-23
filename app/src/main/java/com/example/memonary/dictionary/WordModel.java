@@ -1,10 +1,12 @@
 package com.example.memonary.dictionary;
 
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -34,9 +36,18 @@ public class WordModel {
         return phonetics;
     }
 
+    private String json;
 
     public String getId() {
-        return String.valueOf(this.toString().hashCode());
+        return String.valueOf(json.hashCode());
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
+
+    public String getJson() {
+        return json;
     }
 
     public WordState getState() {

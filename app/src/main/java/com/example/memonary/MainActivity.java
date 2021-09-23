@@ -137,8 +137,6 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-        Intent i = new Intent(getApplicationContext(), CloseNotifications.class);
-        startService(i);
     }
 
     @Override

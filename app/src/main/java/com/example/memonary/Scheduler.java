@@ -7,14 +7,16 @@ import androidx.work.WorkManager;
 
 import com.example.memonary.dictionary.WordModel;
 import com.example.memonary.dictionary.WordState;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Scheduler {
     private static Scheduler instance = new Scheduler();
-    private static final TimeUnit timeUnit = TimeUnit.SECONDS;
 
     private Scheduler() {
     }
@@ -24,16 +26,17 @@ public class Scheduler {
     }
 
     public void updateSchedule(WordModel word) {
-        word.setState(word.getState().next());
         if (word.getState() == WordState.LEARNED)
             return;
-        setDueTime(word);
+        word.setState(word.getState().next());
+        if (word.getState() != WordState.LEARNED) {
+            setDueTime(word);
+        }
     }
 
     public void resetSchedule(WordModel word) {
         word.setState(WordState.DAY1);
         setDueTime(word);
-        
     }
 
     public void setDueTime(WordModel word) {
@@ -44,16 +47,17 @@ public class Scheduler {
         word.setDueTime(c.getTimeInMillis());
     }
 
-    public void scheduleWorker(WordModel word, String id) {
+    public void scheduleWorker(WordModel word) {
         long delay = word.getDueTime() - new Date().getTime();
         if (delay < 0)
             return;
-        Data data = new Data.Builder().putString("wordId", id).putString("word", word.getWord()).build();
+        Gson gson = new Gson();
+        Data data = new Data.Builder().putString("word", gson.toJson(word)).build();
         OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotifyWorker.class)
                 .setInitialDelay(delay, TimeUnit.MILLISECONDS)
-                .addTag(id)
+                .addTag(word.getId())
                 .setInputData(data)
                 .build();
-        WorkManager.getInstance(MyApplication.getContext()).enqueueUniqueWork(id, ExistingWorkPolicy.KEEP, notificationWork);
+        WorkManager.getInstance(MyApplication.getContext()).enqueueUniqueWork(word.getId(), ExistingWorkPolicy.KEEP, notificationWork);
     }
 }

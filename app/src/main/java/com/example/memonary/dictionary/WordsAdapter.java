@@ -44,8 +44,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
-        Log.d("dictionary word", wordModel.toString());
-        holder.saveButton.setChecked(dbManager.isSaved(wordModel));
+        holder.saveButton.setChecked(wordModel.getState() != WordState.NOT_SAVED);
         holder.saveButton.setOnClickListener((view) -> toggleSave(wordModel));
         holder.wordTitle.setText(wordModel.getWord());
         PronunciationAdapter pronunciationAdapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());

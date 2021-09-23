@@ -1,7 +1,9 @@
 package com.example.memonary.dictionary;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,15 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.memonary.DatabaseManager;
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 import com.example.memonary.WordWrapperViewModel;
 import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,12 +48,13 @@ public class DictionaryFragment extends Fragment {
         recyclerViewWords.setLayoutManager(new LinearLayoutManager(getContext()) {
         });
         viewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
-        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
-        if (viewModel.getSelectedWord().getValue() != null)
-            show_word(viewModel.getSelectedWord().getValue());
+//        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
+//        if (viewModel.getSelectedWord().getValue() != null)
+//            show_word(viewModel.getSelectedWord().getValue());
         Bundle bundle = getActivity().getIntent().getExtras();
         if (bundle != null && bundle.getString("word") != null) {
-            show_word(MainActivity.savedWords.get(bundle.getString("word")));
+            Gson gson = new Gson();
+            show_word(gson.fromJson(bundle.getString("word"), WordModel.class));
         }
         SimpleSearchView simpleSearchView = getActivity().findViewById(R.id.searchView);
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
@@ -74,10 +81,13 @@ public class DictionaryFragment extends Fragment {
         API_Interface searchService= RetrofitClient.getRetrofitInstance().create(API_Interface.class);
         Call<List<WordModel>> call = searchService.getResults(word);
         call.enqueue(new Callback<List<WordModel>>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
                 WordsAdapter adapter = (WordsAdapter) recyclerViewWords.getAdapter();
-                adapter.setSearchedWords((ArrayList<WordModel>) response.body());
+                ArrayList<WordModel> words = (ArrayList<WordModel>) response.body().stream()
+                        .map(word -> fill(word)).collect(Collectors.toList());
+                adapter.setSearchedWords(words);
             }
 
             @Override
@@ -87,10 +97,21 @@ public class DictionaryFragment extends Fragment {
         });
     }
 
-    public void show_word(WordWrapper word) {
-        ResponseAdapter adapter = (ResponseAdapter) recyclerViewWords.getAdapter();
-        adapter.setWordWrapper(word);
-        adapter.notifyDataSetChanged();
+    public WordModel fill(WordModel wordModel) {
+        Gson gson = new Gson();
+        wordModel.setJson(gson.toJson(wordModel));
+        DatabaseManager dbManager = DatabaseManager.getInstance();
+        if (dbManager.isSaved(wordModel))
+            return dbManager.savedWords.get(wordModel.getId());
+        else
+            return wordModel;
+    }
+
+    public void show_word(WordModel word) {
+        WordsAdapter adapter = (WordsAdapter) recyclerViewWords.getAdapter();
+        ArrayList<WordModel> wordModels = new ArrayList<>();
+        wordModels.add(word);
+        adapter.setSearchedWords(wordModels);
     }
 
 }

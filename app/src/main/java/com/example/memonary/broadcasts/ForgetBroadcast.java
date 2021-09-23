@@ -16,6 +16,7 @@ import com.example.memonary.NotifyWorker;
 import com.example.memonary.Scheduler;
 import com.example.memonary.dictionary.WordModel;
 import com.google.firebase.database.DatabaseReference;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +30,14 @@ public class ForgetBroadcast extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         scheduler = Scheduler.getInstance();
         dbManager = DatabaseManager.getInstance();
-        String wordId = intent.getExtras().getString("wordId");
-        WordModel word = dbManager.getWordById(wordId);
-        onForgot(word, wordId);
-        NotificationManagerCompat.from(context).cancel(Integer.parseInt(wordId));
+        Gson gson = new Gson();
+        WordModel word = gson.fromJson(intent.getExtras().getString("word"), WordModel.class);
+        onForgot(word);
+        NotificationManagerCompat.from(context).cancel(Integer.parseInt(word.getId()));
     }
 
-    public void onForgot(WordModel wordModel, String id) {
+    public void onForgot(WordModel wordModel) {
         scheduler.resetSchedule(wordModel);
-        dbManager.updateWord(wordModel, id);
+        dbManager.updateWord(wordModel);
     }
 }
