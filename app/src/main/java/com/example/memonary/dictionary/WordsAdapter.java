@@ -24,8 +24,8 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
 
     private ArrayList<WordModel> searchedWords;
     private Context context;
-    private DatabaseManager dbManager = DatabaseManager.getInstance();
-    private Scheduler scheduler = Scheduler.getInstance();
+    private DatabaseManager dbManager;
+    private Scheduler scheduler;
 
 
     public WordsAdapter(Context context) {
@@ -38,6 +38,8 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater= LayoutInflater.from(context);
         View wordItem = inflater.inflate(R.layout.item_word, parent, false);
+        dbManager = DatabaseManager.getInstance();
+        scheduler = Scheduler.getInstance();
         return new ViewHolder(wordItem);
     }
 

@@ -84,8 +84,12 @@ public class DictionaryFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
+                ArrayList<WordModel> words;
                 WordsAdapter adapter = (WordsAdapter) recyclerViewWords.getAdapter();
-                ArrayList<WordModel> words = (ArrayList<WordModel>) response.body().stream()
+                if (response.body() == null)
+                    words = new ArrayList<>();
+                else
+                    words = (ArrayList<WordModel>) response.body().stream()
                         .map(word -> fill(word)).collect(Collectors.toList());
                 adapter.setSearchedWords(words);
             }
