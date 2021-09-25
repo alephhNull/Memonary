@@ -15,14 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.memonary.DatabaseManager;
-import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 import com.example.memonary.WordWrapperViewModel;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -38,11 +36,13 @@ public class DictionaryFragment extends Fragment {
     private RecyclerView recyclerViewWords;
     private ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
     private WordWrapperViewModel viewModel;
+    private DatabaseManager dbManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_dictionary, container, false);
+        dbManager = DatabaseManager.getInstance();
         recyclerViewWords = root.findViewById(R.id.recyclerWords);
         recyclerViewWords.setAdapter(new WordsAdapter(getContext()));
         recyclerViewWords.setLayoutManager(new LinearLayoutManager(getContext()) {
@@ -84,11 +84,9 @@ public class DictionaryFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<List<WordModel>> call, Response<List<WordModel>> response) {
-                ArrayList<WordModel> words;
+                ArrayList<WordModel> words = new ArrayList<>();
                 WordsAdapter adapter = (WordsAdapter) recyclerViewWords.getAdapter();
-                if (response.body() == null)
-                    words = new ArrayList<>();
-                else
+                if (response.body() != null)
                     words = (ArrayList<WordModel>) response.body().stream()
                         .map(word -> fill(word)).collect(Collectors.toList());
                 adapter.setSearchedWords(words);
@@ -102,11 +100,9 @@ public class DictionaryFragment extends Fragment {
     }
 
     public WordModel fill(WordModel wordModel) {
-        Gson gson = new Gson();
-        wordModel.setJson(gson.toJson(wordModel));
-        DatabaseManager dbManager = DatabaseManager.getInstance();
-        if (dbManager.isSaved(wordModel))
-            return dbManager.savedWords.get(wordModel.getId());
+        wordModel.setStringified(wordModel.toString());
+        if (dbManager.isSaved(wordModel.getId()))
+            return dbManager.getWordById(wordModel.getId());
         else
             return wordModel;
     }

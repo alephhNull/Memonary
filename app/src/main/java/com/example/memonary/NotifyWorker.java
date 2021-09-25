@@ -42,9 +42,8 @@ public class NotifyWorker extends Worker {
             intent.putExtra("word", jsonWord);
         }
 
-
         PendingIntent showWord = PendingIntent.getActivity(context, Integer.parseInt(word.getId()),
-                intents[0], PendingIntent.FLAG_CANCEL_CURRENT);
+                intents[0], PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent forgetWord = PendingIntent.getBroadcast(context, Integer.parseInt(word.getId()),
                 intents[1], PendingIntent.FLAG_CANCEL_CURRENT);
         PendingIntent rememberWord = PendingIntent.getBroadcast(context, Integer.parseInt(word.getId()),

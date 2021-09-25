@@ -1,15 +1,10 @@
 package com.example.memonary.dictionary;
 
-import android.os.Parcelable;
-import android.util.Log;
-
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @IgnoreExtraProperties
 public class WordModel {
@@ -36,22 +31,26 @@ public class WordModel {
         return phonetics;
     }
 
-    private String json;
+    private String stringified;
 
     public String getId() {
-        return String.valueOf(json.hashCode());
+        return String.valueOf(stringified.hashCode());
     }
 
-    public void setJson(String json) {
-        this.json = json;
+    public void setStringified(String stringified) {
+        this.stringified = stringified;
     }
 
-    public String getJson() {
-        return json;
+    public String getStringified() {
+        return stringified;
     }
 
     public WordState getState() {
         return state;
+    }
+
+    public boolean isDue() {
+        return dueTime < new Date().getTime() && state != WordState.LEARNED;
     }
 
     @Override

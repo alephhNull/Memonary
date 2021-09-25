@@ -1,7 +1,11 @@
 package com.example.memonary.words;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,25 +13,36 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
 import com.example.memonary.broadcasts.ForgetBroadcast;
 import com.example.memonary.broadcasts.RememberBroadcast;
+import com.example.memonary.dictionary.WordModel;
+import com.example.memonary.dictionary.WordState;
 import com.example.memonary.dictionary.WordWrapper;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.ViewHolder> {
 
     ArrayList<WordWrapper> savedWords;
-    Context context;
+    List<WordModel> filteredWords;
+    DatabaseManager dbManager;
+    Activity activity;
     OnWordSelectedListener onWordSelectedListener;
-    int state;
+    int filter;
 
-    public SavedWordsAdapter(Context context, OnWordSelectedListener onWordSelectedListener) {
-        this.context = context;
+    public SavedWordsAdapter(Activity activity, OnWordSelectedListener onWordSelectedListener) {
+        this.activity = activity;
         this.onWordSelectedListener = onWordSelectedListener;
+        dbManager = DatabaseManager.getInstance();
     }
 
     @NonNull
@@ -40,21 +55,23 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        WordWrapper wordWrapper = savedWords.get(position);
-        holder.wordTextView.setText(wordWrapper.getTitle());
-        int visibility = wordWrapper.getIsDue() ? View.VISIBLE : View.INVISIBLE;
+        WordModel wordModel = filteredWords.get(position);
+        holder.wordTextView.setText(wordModel.getWord());
+        int visibility = wordModel.isDue() ? View.VISIBLE : View.INVISIBLE;
         holder.forgetButton.setVisibility(visibility);
         holder.rememberButton.setVisibility(visibility);
         holder.forgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, ForgetBroadcast.class);
-                i.putExtra("word", wordWrapper.getTitle());
-                context.sendBroadcast(i);
+                Log.d("position clicked", String.valueOf(position));
+                Intent i = new Intent(activity, ForgetBroadcast.class);
+                i.putExtra("word", new Gson().toJson(wordModel));
+                activity.sendBroadcast(i);
                 holder.forgetButton.setVisibility(View.INVISIBLE);
                 holder.rememberButton.setVisibility(View.INVISIBLE);
-                if (state != 1 && state != 7) {
-                    savedWords.remove(position);
+                if (filter != 1 && filter != 7) {
+                    int position = filteredWords.indexOf(wordModel);
+                    filteredWords.remove(position);
                     notifyItemRemoved(position);
                 }
             }
@@ -62,13 +79,14 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
         holder.rememberButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context, RememberBroadcast.class);
-                i.putExtra("word", wordWrapper.getTitle());
-                context.sendBroadcast(i);
+                Intent i = new Intent(activity, RememberBroadcast.class);
+                i.putExtra("word", new Gson().toJson(wordModel));
+                activity.sendBroadcast(i);
                 holder.forgetButton.setVisibility(View.INVISIBLE);
                 holder.rememberButton.setVisibility(View.INVISIBLE);
-                if (state != 7) {
-                    savedWords.remove(position);
+                if (filter != 7) {
+                    int position = filteredWords.indexOf(wordModel);
+                    filteredWords.remove(position);
                     notifyItemRemoved(position);
                 }
 
@@ -78,9 +96,9 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
     @Override
     public int getItemCount() {
-        if (savedWords == null)
+        if (filteredWords == null)
             return 0;
-        return savedWords.size();
+        return filteredWords.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -99,14 +117,26 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
         @Override
         public void onClick(View view) {
-            WordWrapper wordWrapper = savedWords.get(getAdapterPosition());
-            onWordSelectedListener.onWordSelected(wordWrapper);
+//            WordWrapper wordWrapper = savedWords.get(getAdapterPosition());
+//            onWordSelectedListener.onWordSelected(wordWrapper);
         }
     }
 
-    public void setSavedWords(ArrayList<WordWrapper> savedWords, int state) {
-        this.savedWords = savedWords;
-        this.state = state;
-        notifyDataSetChanged();
+    public void setFilter(int filter) {
+        this.filter = filter;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void filterWords() {
+     if (filter == 0) {
+         filteredWords = dbManager.getSavedWords().stream().filter(WordModel::isDue)
+                 .collect(Collectors.toList());
+     } else if(filter < 7) {
+         filteredWords = dbManager.getSavedWords().stream().filter(word ->
+                 word.getState()== WordState.values()[this.filter]).collect(Collectors.toList());
+     } else if (filter == 7){
+         filteredWords = dbManager.getSavedWords();
+     }
+     activity.runOnUiThread(this::notifyDataSetChanged);
     }
 }

@@ -58,7 +58,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     }
 
     private void toggleSave(WordModel word) {
-        if (!dbManager.isSaved(word)) saveWord(word);
+        if (word.getState() == WordState.NOT_SAVED) saveWord(word);
         else removeWord(word);
     }
 
