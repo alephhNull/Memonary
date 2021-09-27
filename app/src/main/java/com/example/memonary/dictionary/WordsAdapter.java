@@ -1,5 +1,6 @@
 package com.example.memonary.dictionary;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,16 +10,21 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 
 import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
 import com.example.memonary.Scheduler;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import kotlin.Unit;
+import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup;
 
 public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> {
 
@@ -47,7 +53,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         WordModel wordModel = searchedWords.get(position);
         holder.saveButton.setChecked(wordModel.getState() != WordState.NOT_SAVED);
-        holder.saveButton.setOnClickListener((view) -> toggleSave(wordModel));
+        holder.saveButton.setOnClickListener((view) -> toggleSave(wordModel, view));
         holder.wordTitle.setText(wordModel.getWord());
         PronunciationAdapter pronunciationAdapter = new PronunciationAdapter((ArrayList<Phonetics>) wordModel.getPhonetics());
         holder.pronunciations.setAdapter(pronunciationAdapter);
@@ -57,9 +63,22 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
         holder.meanings.setLayoutManager(new LinearLayoutManager(context));
     }
 
-    private void toggleSave(WordModel word) {
+    private void toggleSave(WordModel word, View view) {
+        SwitchCompat btn = (SwitchCompat) view;
         if (word.getState() == WordState.NOT_SAVED) saveWord(word);
-        else removeWord(word);
+        else {
+            btn.setChecked(true);
+            new AlertDialog.Builder(context)
+                    .setMessage("Are you sure you want to remove this word? \n" +
+                            "all progress will be lost")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("Yes", (dialogInterface, i) -> {
+                        removeWord(word);
+                        btn.setChecked(false);
+                    })
+                    .create()
+                    .show();
+        }
     }
 
     private void saveWord(WordModel word) {
@@ -69,6 +88,8 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
 
     private void removeWord(WordModel word) {
         dbManager.removeWord(word);
+        WorkManager.getInstance(context).cancelAllWorkByTag(word.getId());
+        NotificationManagerCompat.from(context).cancel(Integer.parseInt(word.getId()));
     }
 
     @Override
@@ -82,7 +103,7 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.ViewHolder> 
 
         //TODO
         private TextView wordTitle;
-        private Switch saveButton;
+        private SwitchCompat saveButton;
         private RecyclerView pronunciations;
         private RecyclerView meanings;
 

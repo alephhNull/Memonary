@@ -58,6 +58,14 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.Vi
             synonyms = "synonyms: " + String.join(", ", definition.getSynonyms());
             holder.synonyms.setText(synonyms);
         }
+        if (definition.getAntonyms() == null || definition.getAntonyms().isEmpty()) {
+            holder.antonyms.setVisibility(View.GONE);
+        }
+        else {
+            String antonyms;
+            antonyms = "antonyms: " + String.join(", ", definition.getAntonyms());
+            holder.antonyms.setText(antonyms);
+        }
     }
 
     @Override
@@ -72,12 +80,14 @@ public class DefinitionAdapter extends RecyclerView.Adapter<DefinitionAdapter.Vi
         private TextView definition;
         private TextView example;
         private TextView synonyms;
+        private TextView antonyms;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.definition = itemView.findViewById(R.id.definitionTextView);
             this.example = itemView.findViewById(R.id.exampleTextView);
             this.synonyms = itemView.findViewById(R.id.synonymsTextView);
+            this.antonyms = itemView.findViewById(R.id.antonymsTextView);
         }
     }
 }

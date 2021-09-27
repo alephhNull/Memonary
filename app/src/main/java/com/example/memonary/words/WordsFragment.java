@@ -10,16 +10,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 
-import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
-import com.example.memonary.WordWrapperViewModel;
+import com.example.memonary.WordViewModel;
+import com.example.memonary.dictionary.WordModel;
 import com.example.memonary.dictionary.WordWrapper;
 
 import java.util.concurrent.Executors;
@@ -28,7 +27,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class WordsFragment extends Fragment implements OnWordSelectedListener {
 
     private RecyclerView savedWordsRecyclerView;
-    private WordWrapperViewModel wordWrapperViewModel;
+    private WordViewModel viewModel;
     private SavedWordsAdapter savedWordsAdapter;
     private ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 
@@ -39,7 +38,7 @@ public class WordsFragment extends Fragment implements OnWordSelectedListener {
         View root = inflater.inflate(R.layout.fragment_words, container, false);
         savedWordsRecyclerView = root.findViewById(R.id.recyclerSavedWords);
         savedWordsAdapter = new SavedWordsAdapter(getActivity(), this);
-        wordWrapperViewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(WordViewModel.class);
         savedWordsRecyclerView.setAdapter(savedWordsAdapter);
         savedWordsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         savedWordsRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -53,14 +52,6 @@ public class WordsFragment extends Fragment implements OnWordSelectedListener {
                     savedWordsAdapter.setFilter(i);
                     savedWordsAdapter.filterWords();
                 });
-//                if (MainActivity.savedWords == null)
-//                    return;
-//                List<WordWrapper> filteredWords = new ArrayList<>(MainActivity.savedWords.values());
-//                if (i == 0)
-//                    filteredWords = filteredWords.stream().filter(WordWrapper::getIsDue).collect(Collectors.toList());
-//                else if (i < 7)
-//                    filteredWords = filteredWords.stream().filter(wordWrapper -> wordWrapper.getState().equals(WordWrapper.states.get(i-1))).collect(Collectors.toList());
-//                savedWordsAdapter.setSavedWords((ArrayList<WordWrapper>) filteredWords, i);
             }
 
             @Override
@@ -79,12 +70,12 @@ public class WordsFragment extends Fragment implements OnWordSelectedListener {
     }
 
     @Override
-    public void onWordSelected(WordWrapper wordWrapper) {
-        wordWrapperViewModel.selectWord(wordWrapper);
+    public void onWordSelected(WordModel word) {
+        viewModel.setSelectedWord(word);
     }
 
 }
 
 interface OnWordSelectedListener {
-    void onWordSelected(WordWrapper wordWrapper);
+    void onWordSelected(WordModel word);
 }
