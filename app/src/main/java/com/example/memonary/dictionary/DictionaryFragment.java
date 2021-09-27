@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.memonary.DatabaseManager;
 import com.example.memonary.R;
+import com.example.memonary.WordViewModel;
 import com.example.memonary.WordWrapperViewModel;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.gson.Gson;
@@ -35,7 +36,7 @@ public class DictionaryFragment extends Fragment {
 
     private RecyclerView recyclerViewWords;
     private ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
-    private WordWrapperViewModel viewModel;
+    private WordViewModel viewModel;
     private DatabaseManager dbManager;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +48,10 @@ public class DictionaryFragment extends Fragment {
         recyclerViewWords.setAdapter(new WordsAdapter(getContext()));
         recyclerViewWords.setLayoutManager(new LinearLayoutManager(getContext()) {
         });
-        viewModel = new ViewModelProvider(requireActivity()).get(WordWrapperViewModel.class);
-//        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
-//        if (viewModel.getSelectedWord().getValue() != null)
-//            show_word(viewModel.getSelectedWord().getValue());
+        viewModel = new ViewModelProvider(requireActivity()).get(WordViewModel.class);
+        viewModel.getSelectedWord().observe(getViewLifecycleOwner(), this::show_word);
+        if (viewModel.getSelectedWord().getValue() != null)
+            show_word(viewModel.getSelectedWord().getValue());
         Bundle bundle = getActivity().getIntent().getExtras();
         if (bundle != null && bundle.getString("word") != null) {
             Gson gson = new Gson();

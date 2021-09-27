@@ -43,7 +43,7 @@ public class Scheduler {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.SECOND, 10 + word.getState().value);
+        c.add(Calendar.DATE, word.getState().value);
         word.setDueTime(c.getTimeInMillis());
     }
 

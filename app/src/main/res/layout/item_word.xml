@@ -26,12 +26,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"/>
 
-        <!--        <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup-->
+<!--                <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup-->
 <!--            android:id="@+id/save_button"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="wrap_content"-->
@@ -54,6 +55,7 @@
 <!--                app:toggle_selectedBorderColor="#5e6fed"-->
 <!--                app:toggle_selectedIcon="@drawable/ic_baseline_save_24" />-->
 <!--        </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>-->
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

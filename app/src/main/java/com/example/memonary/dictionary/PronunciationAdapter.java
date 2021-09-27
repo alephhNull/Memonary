@@ -15,6 +15,8 @@ import com.example.memonary.R;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdapter.ViewHolder> {
 
@@ -36,10 +38,14 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.phonetic.setText(pronunciations.get(position).getText());
+        if (pronunciations.get(position) == null)
+            holder.audioButton.setVisibility(View.GONE);
         holder.audioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                playAudioFromUrl(pronunciations.get(position).getAudioUrl());
+                Executors.newSingleThreadExecutor().execute(() ->
+                        playAudioFromUrl(pronunciations.get(position).getAudioUrl())
+                        );
             }
         });
     }
@@ -47,7 +53,7 @@ public class PronunciationAdapter extends RecyclerView.Adapter<PronunciationAdap
     public void playAudioFromUrl(String url){
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
-            mediaPlayer.setDataSource(url);
+            mediaPlayer.setDataSource("https:" + url);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (IOException e) {

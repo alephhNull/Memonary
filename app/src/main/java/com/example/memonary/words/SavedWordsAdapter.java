@@ -117,8 +117,8 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Vi
 
         @Override
         public void onClick(View view) {
-//            WordWrapper wordWrapper = savedWords.get(getAdapterPosition());
-//            onWordSelectedListener.onWordSelected(wordWrapper);
+            WordModel word = filteredWords.get(getAdapterPosition());
+            onWordSelectedListener.onWordSelected(word);
         }
     }
 
