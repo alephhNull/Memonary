@@ -3,7 +3,6 @@ package com.example.memonary;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -36,7 +35,7 @@ public class NotifyWorker extends Worker {
         Gson gson = new Gson();
         String jsonWord = getInputData().getString("word");
         WordModel word = gson.fromJson(jsonWord, WordModel.class);
-        Intent[] intents = {new Intent(context, MainActivity.class),
+        Intent[] intents = {new Intent(context, AppActivity.class),
                 new Intent(context, ForgetBroadcast.class), new Intent(context, RememberBroadcast.class)};
         for (Intent intent : intents) {
             intent.putExtra("word", jsonWord);

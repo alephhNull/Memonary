@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.memonary.AppActivity;
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -62,7 +63,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(getContext(), MainActivity.class);
+                                Intent i = new Intent(getContext(), AppActivity.class);
                                 startActivity(i);
                             } else {
                                 Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();

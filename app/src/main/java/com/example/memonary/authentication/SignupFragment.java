@@ -15,12 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.memonary.AppActivity;
 import com.example.memonary.MainActivity;
 import com.example.memonary.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignupFragment extends Fragment implements View.OnClickListener{
     
@@ -57,7 +57,7 @@ public class SignupFragment extends Fragment implements View.OnClickListener{
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Intent i = new Intent(getContext(), MainActivity.class);
+                                Intent i = new Intent(getContext(), AppActivity.class);
                                 startActivity(i);
                             } else {
                                 Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
